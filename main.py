@@ -61,15 +61,15 @@ def main():
                     datas = session.next()
 
                 if datas['class'] == "TPV":
-                    print("Got datas")
+                    # print("Got datas")
                     # create gps datas and insert it
                     gps_data = GPSData(latitude=session.fix.latitude, longitude=session.fix.longitude,
                                        speed=session.fix.speed, date_time=session.fix.time, session=track_session)
                     print("Insert: " + str(gps_data))
                     db_session.add(gps_data)
                     db_session.commit()
-                else:
-                    print("No datas ...")
+                # else:
+                    # print("No datas ...")
 
                 if GPIO.event_detected(config.PIN_NUMBER_BUTTON):
                     print("Event detected stop recording !!!")
@@ -77,7 +77,6 @@ def main():
 
             GPIO.remove_event_detect(config.PIN_NUMBER_BUTTON)
             GPIO.output(config.PIN_NUMBER_LED, False)
-            # GPIO.remove_event_detect(config.PIN_NUMBER_BUTTON)
             # update the session with end date time
             track_session.end_date_time = datetime.utcnow()
             print("Update: " + str(track_session))
