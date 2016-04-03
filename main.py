@@ -60,6 +60,7 @@ def main():
                 datas = session.next()
 
                 if datas['class'] == "TPV":
+                    print("Got datas")
                     # create gps datas and insert it
                     gps_data = GPSData(latitude=session.fix.latitude, longitude=session.fix.longitude,
                                        speed=session.fix.speed, date_time=session.fix.time, session=track_session)
@@ -70,6 +71,7 @@ def main():
                     print("No signal ...")
 
                 if GPIO.event_detected(config.PIN_NUMBER_BUTTON):
+                    print("Event detected stop recording !!!")
                     stop = True
 
             GPIO.remove_event_detect(config.PIN_NUMBER_BUTTON)
