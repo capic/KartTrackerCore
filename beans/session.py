@@ -1,5 +1,5 @@
 __author__ = 'Vincent'
-from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy import Column, Integer, String, Date, Time
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 from track import Track
@@ -8,10 +8,11 @@ from utils.bdd import Base, engine
 
 class Session(Base):
     __tablename__ = 'Sessions'
-    id = Column(Integer, primary_key=True)
+    id_day_session = Column(Integer, primary_key=True)
+    date = Column(Date, primary_key=True)
     name = Column(String)
-    start_date_time = Column(DateTime)
-    end_date_time = Column(DateTime)
+    start_time = Column(Time)
+    end_time = Column(Time)
 
     track_id = Column(Integer, ForeignKey('Tracks.id'))
     track = relationship(Track)
