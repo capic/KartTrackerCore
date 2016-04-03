@@ -43,7 +43,7 @@ def main():
 
             print("Push button to start")
             time.sleep(0.01)
-            GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.BOTH)
+            GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
 
             # create new session and insert it
             track_session = Session(name="Session 1", start_date_time=datetime.utcnow())
@@ -52,7 +52,7 @@ def main():
             db_session.commit()
 
             # time.sleep(0.1)
-            GPIO.add_event_detect(config.PIN_NUMBER_BUTTON, GPIO.BOTH)
+            GPIO.add_event_detect(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
 
             GPIO.output(config.PIN_NUMBER_LED, True)
             while not stop:
@@ -75,7 +75,7 @@ def main():
                     print("Event detected stop recording !!!")
                     stop = True
 
-            GPIO.remove_event_detect(config.PIN_NUMBER_BUTTON)
+            # GPIO.remove_event_detect(config.PIN_NUMBER_BUTTON)
             GPIO.output(config.PIN_NUMBER_LED, False)
             # update the session with end date time
             track_session.end_date_time = datetime.utcnow()
