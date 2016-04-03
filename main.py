@@ -57,9 +57,8 @@ def main():
             GPIO.output(config.PIN_NUMBER_LED, True)
             while not stop:
                 # get the gps datas
-                print("Before next")
-                datas = session.next()
-                print("After next")
+                if session.waiting():
+                    datas = session.next()
 
                 if datas['class'] == "TPV":
                     print("Got datas")
@@ -70,7 +69,7 @@ def main():
                     db_session.add(gps_data)
                     db_session.commit()
                 else:
-                    print("No signal ...")
+                    print("No datas ...")
 
                 if GPIO.event_detected(config.PIN_NUMBER_BUTTON):
                     print("Event detected stop recording !!!")
