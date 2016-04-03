@@ -53,7 +53,7 @@ def main():
             GPIO.add_event_detect(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
 
             GPIO.output(config.PIN_NUMBER_LED, True)
-            while not GPIO.event_detected(config.PIN_NUMBER_BUTTON):
+            while not GPIO.event_detected(config.PIN_NUMBER_BUTTON, GPIO.FALLING):
                 # get the gps datas
                 datas = session.next()
 
