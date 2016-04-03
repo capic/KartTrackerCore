@@ -1,0 +1,9 @@
+__author__ = 'Vincent'
+
+BDD_TYPE = 'sqlite'
+BDD_NAME = 'karttracker.db'
+BDD_STRING_CONNECTION = BDD_TYPE + ':///' + BDD_NAME
+
+PIN_NUMBER_BUTTON = 21
+PIN_NUMBER_LED = 20
+PIN_NUMBER_RUNING = 16
