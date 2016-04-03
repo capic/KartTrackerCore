@@ -14,7 +14,8 @@ class GPSData(Base):
     speed = Column(Float)
     date_time = Column(String)
 
-    session_id = Column(Integer, ForeignKey('Sessions.id'))
+    session_id = Column(Integer, ForeignKey('Sessions.id_day_session'))
+    session_date = Column(Integer, ForeignKey('Sessions.date_session'))
     session = relationship(Session)
 
     def __repr__(self):

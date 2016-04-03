@@ -9,7 +9,7 @@ from utils.bdd import Base, engine
 class Session(Base):
     __tablename__ = 'Sessions'
     id_day_session = Column(Integer, primary_key=True)
-    date = Column(Date, primary_key=True)
+    date_session = Column(Date, primary_key=True)
     name = Column(String)
     start_time = Column(Time)
     end_time = Column(Time)
