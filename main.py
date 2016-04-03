@@ -75,7 +75,7 @@ def main():
                     print("Event detected stop recording !!!")
                     stop = True
 
-            # GPIO.remove_event_detect(config.PIN_NUMBER_BUTTON)
+            GPIO.remove_event_detect(config.PIN_NUMBER_BUTTON)
             GPIO.output(config.PIN_NUMBER_LED, False)
             # update the session with end date time
             track_session.end_date_time = datetime.utcnow()
