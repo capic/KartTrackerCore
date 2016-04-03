@@ -33,8 +33,6 @@ def main():
 
     try:
         while True:
-            stop = False
-
             print("Push button to start")
             time.sleep(0.01)
             GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
@@ -45,11 +43,11 @@ def main():
             db_session.add(track_session)
             db_session.commit()
 
-            time.sleep(1)
+            time.sleep(0.1)
             GPIO.add_event_detect(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
 
             GPIO.output(config.PIN_NUMBER_LED, True)
-            while not stop:
+            while not GPIO.event_detected(config.PIN_NUMBER_BUTTON):
                 # get the gps datas
                 datas = session.next()
 
@@ -60,9 +58,6 @@ def main():
                     print("Insert: " + str(gps_data))
                     db_session.add(gps_data)
                     db_session.commit()
-
-                if GPIO.event_detected(config.PIN_NUMBER_BUTTON):
-                    stop = True
 
             GPIO.remove_event_detect(config.PIN_NUMBER_BUTTON)
             GPIO.output(config.PIN_NUMBER_LED, False)
