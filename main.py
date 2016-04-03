@@ -57,7 +57,9 @@ def main():
             GPIO.output(config.PIN_NUMBER_LED, True)
             while not stop:
                 # get the gps datas
+                print("Before next")
                 datas = session.next()
+                print("After next")
 
                 if datas['class'] == "TPV":
                     print("Got datas")
