@@ -45,7 +45,7 @@ def main():
             GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
 
             # create new session and insert it
-            track_session = start_track_session()
+            track_session = start_track_session(1)
             print("Insert: " + str(track_session))
             db_session.add(track_session)
             db_session.commit()
