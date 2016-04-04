@@ -26,11 +26,16 @@ def start_track_session(track_id):
 
     qry = db_session.query(func.max(Session.id_day_session).label("max_id_day_session")).filter(Session.date_session == date.today()).filter(Session.track_id == track_id)
     res = qry.one()
-    print("Max " + res.max_id_day_session)
+
+    id_day_session = 1
+    if res is not None:
+        print("Max " + res.max_id_day_session)
+        id_day_session = res.max_id_day_session + 1
+
     track_session.date_session = date.today()
     track_session.track_id = track_id
-    track_session.name = "Session " + str(res.max_id_day_session + 1)
-    track_session.id_day_session = res.max_id_day_session + 1
+    track_session.name = "Session " + str(id_day_session)
+    track_session.id_day_session = id_day_session
 
     return track_session
 
