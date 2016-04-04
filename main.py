@@ -5,10 +5,9 @@ from datetime import datetime
 from gps import *
 from beans.session import Session
 from beans.gps_datas import GPSData
-from utils.bdd import engine, db_session
+from utils.bdd import *
 import utils.config as config
 import RPi.GPIO as GPIO
-import time
 
 # stop = False
 #
@@ -46,7 +45,7 @@ def main():
             GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
 
             # create new session and insert it
-            track_session = Session(name="Session 1")
+            track_session = start_track_session()
             print("Insert: " + str(track_session))
             db_session.add(track_session)
             db_session.commit()
