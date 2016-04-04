@@ -1,6 +1,6 @@
 __author__ = 'Vincent'
 
-from datetime import datetime
+from datetime import datetime, date
 
 from gps import *
 from beans.session import Session
@@ -8,7 +8,6 @@ from beans.gps_datas import GPSData
 from utils.bdd import *
 import utils.config as config
 import RPi.GPIO as GPIO
-from datetime import date
 
 # stop = False
 #
@@ -35,6 +34,7 @@ def start_track_session(track_id):
     track_session.track_id = track_id
     track_session.name = "Session " + str(id_day_session)
     track_session.id_day_session = id_day_session
+    track_session.start_time = datetime.now().time()
 
     return track_session
 
