@@ -1,6 +1,6 @@
 __author__ = 'Vincent'
 from sqlalchemy import *
-from sqlalchemy.orm import (scoped_session, sessionmaker, relationship, backref, func)
+from sqlalchemy.orm import (scoped_session, sessionmaker, relationship, backref)
 from sqlalchemy.ext.declarative import declarative_base
 import config
 from beans.session import Session
