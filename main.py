@@ -28,8 +28,7 @@ def start_track_session(track_id):
     res = qry.one()
 
     id_day_session = 1
-    if res is not None:
-        print("Max " + res.max_id_day_session)
+    if res.max_id_day_session is not None:
         id_day_session = res.max_id_day_session + 1
 
     track_session.date_session = date.today()
