@@ -16,17 +16,17 @@ Base = declarative_base()
 
 
 def start_track_session(track_id):
-    session = session.Session()
+    track_session = beans.session.Session()
 
     qry = db_session.query(func.max(Session.id_day_session).label("max_id_day_session")).filter(Session.date_session == date.today()).filter(Session.track_id == track_id)
     res = qry.one()
 
-    session.date_session = date.today()
-    session.track_id = track_id
-    session.name = "Session " + res.max_id_day_session + 1
-    session.id_day_session = res.max_id_day_session + 1
+    track_session.date_session = date.today()
+    track_session.track_id = track_id
+    track_session.name = "Session " + res.max_id_day_session + 1
+    track_session.id_day_session = res.max_id_day_session + 1
 
-    return session
+    return track_session
 
 # Base.query = db_session.query_property()
 # Base.metadata.create_all(engine)
