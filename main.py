@@ -8,6 +8,7 @@ from beans.gps_datas import GPSData
 from utils.bdd import *
 import utils.config as config
 import RPi.GPIO as GPIO
+from datetime import date
 
 # stop = False
 #
@@ -18,6 +19,20 @@ import RPi.GPIO as GPIO
 #     stop = True
 #     print("Remove button event")
 #     GPIO.remove_event_detect(config.PIN_NUMBER_BUTTON)
+
+
+def start_track_session(track_id):
+    track_session = Session()
+
+    qry = db_session.query(func.max(Session.id_day_session).label("max_id_day_session")).filter(Session.date_session == date.today()).filter(Session.track_id == track_id)
+    res = qry.one()
+
+    track_session.date_session = date.today()
+    track_session.track_id = track_id
+    track_session.name = "Session " + res.max_id_day_session + 1
+    track_session.id_day_session = res.max_id_day_session + 1
+
+    return track_session
 
 
 def init_gpio():
