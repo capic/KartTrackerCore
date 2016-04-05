@@ -24,7 +24,6 @@ class Session(Base):
             self.start_time) + ', end_time: ' + str(self.end_time) + ', track_id: ' + str(
             self.track_id) + '}'
 
-# Track.sessions = relationship("Session", order_by=Session.id, back_populates="track")
 Base.metadata.create_all(engine)
 
 

@@ -1,42 +1,11 @@
 __author__ = 'Vincent'
 
-from datetime import datetime, date
-
 from gps import *
-from beans.session import Session
 from beans.gps_datas import GPSData
 from utils.bdd import *
 import utils.config as config
 import RPi.GPIO as GPIO
-
-# stop = False
-#
-#
-# def press_button_callback(channel):
-#     print("Stop session" + str(channel))
-#     global stop
-#     stop = True
-#     print("Remove button event")
-#     GPIO.remove_event_detect(config.PIN_NUMBER_BUTTON)
-
-
-def start_track_session(track_id):
-    track_session = Session()
-
-    qry = db_session.query(func.max(Session.id_day_session).label("max_id_day_session")).filter(Session.date_session == date.today()).filter(Session.track_id == track_id)
-    res = qry.one()
-
-    id_day_session = 1
-    if res.max_id_day_session is not None:
-        id_day_session = res.max_id_day_session + 1
-
-    track_session.date_session = date.today()
-    track_session.track_id = track_id
-    track_session.name = "Session " + str(id_day_session)
-    track_session.id_day_session = id_day_session
-    track_session.start_time = datetime.now().time()
-
-    return track_session
+from utils.functions import *
 
 
 def init_gpio():
@@ -65,9 +34,6 @@ def main():
 
             # create new session and insert it
             track_session = start_track_session(1)
-            print("Insert: " + str(track_session))
-            db_session.add(track_session)
-            db_session.commit()
 
             GPIO.add_event_detect(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
             GPIO.output(config.PIN_NUMBER_LED, True)
@@ -92,10 +58,7 @@ def main():
             GPIO.remove_event_detect(config.PIN_NUMBER_BUTTON)
             GPIO.output(config.PIN_NUMBER_LED, False)
 
-            # update the session with end date time
-            track_session.end_date_time = datetime.utcnow()
-            print("Update: " + str(track_session))
-            db_session.commit()
+            end_track_session(track_session)
     except KeyError:
         print("Stop by the user")
     except StopIteration:
