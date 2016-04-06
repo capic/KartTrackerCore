@@ -30,7 +30,11 @@ def update_from_central_database():
 
 
 def send_to_central_database():
-    unirest.post(config.REST_ADDRESS + 'sessions', headers={"Accept": "application/json"}, params=json.dumps(db_session.query(Session).all()))
+    ret = db_session.query(Session).all()
+    print("RET : " + ret)
+    j = json.dumps(ret)
+    print("JSON " + j)
+    unirest.post(config.REST_ADDRESS + 'sessions', headers={"Accept": "application/json"}, params=j)
 
 
 def start_track_session(track_id):
