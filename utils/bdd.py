@@ -1,18 +1,10 @@
 __author__ = 'Vincent'
 from sqlalchemy import *
-from sqlalchemy.orm import (scoped_session, sessionmaker, relationship, backref)
-from sqlalchemy.ext.declarative import declarative_base
+from bdd_base import *
 import config
 import unirest
 from beans.track import Track
-
-
-engine = create_engine(config.BDD_STRING_CONNECTION, convert_unicode=True)
-db_session = scoped_session(sessionmaker(autocommit=False,
-                                         autoflush=False,
-                                         bind=engine))
-
-Base = declarative_base()
+from beans.session import Session
 
 
 def update_from_central_database():
@@ -25,5 +17,33 @@ def update_from_central_database():
             db_session.add(track)
             db_session.commit()
 
-# Base.query = db_session.query_property()
-# Base.metadata.create_all(engine)
+
+def start_track_session(track_id):
+    track_session = Session()
+
+    qry = db_session.query(func.max(Session.id_day_session).label("max_id_day_session")).filter(
+        Session.date_session == date.today()).filter(Session.track_id == track_id)
+    res = qry.one()
+
+    id_day_session = 1
+    if res.max_id_day_session is not None:
+        id_day_session = res.max_id_day_session + 1
+
+    track_session.date_session = date.today()
+    track_session.track_id = track_id
+    track_session.name = "Session " + str(id_day_session)
+    track_session.id_day_session = id_day_session
+    track_session.start_time = datetime.utcnow().time()
+
+    print("Insert: " + str(track_session))
+    db_session.add(track_session)
+    db_session.commit()
+
+    return track_session
+
+
+def end_track_session(track_session):
+    # update the session with end date time
+    track_session.end_date_time = datetime.utcnow().time()
+    print("Update: " + str(track_session))
+    db_session.commit()

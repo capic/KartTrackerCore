@@ -1,6 +1,6 @@
 __author__ = 'Vincent'
 from sqlalchemy import Column, Integer, String
-from utils.bdd import Base, engine
+from utils.bdd_base import Base, engine
 
 
 class Track(Base):

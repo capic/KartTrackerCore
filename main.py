@@ -4,10 +4,9 @@ import getopt
 from gps import *
 from beans.gps_datas import GPSData
 from beans.track import Track
-from utils.bdd import *
 import utils.config as config
 import RPi.GPIO as GPIO
-from utils.functions import *
+from utils.bdd import *
 
 
 def init_gpio():
@@ -32,7 +31,7 @@ def main(argv):
     if len(args) == 1:
         track_id = args[1]
 
-    qry = db_session.query().filter(Track.id == track_id)
+    qry = db_session.query(Track).filter(Track.id == track_id)
     track = qry.one()
 
     update_from_central_database()

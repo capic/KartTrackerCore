@@ -3,7 +3,7 @@ from sqlalchemy import Column, Integer, String, Date, Time
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 from track import Track
-from utils.bdd import Base, engine
+from utils.bdd_base import Base, engine
 
 
 class Session(Base):
