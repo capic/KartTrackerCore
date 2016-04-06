@@ -1,5 +1,6 @@
 __author__ = 'Vincent'
 
+import getopt
 from gps import *
 from beans.gps_datas import GPSData
 from beans.track import Track
@@ -7,7 +8,6 @@ from utils.bdd import *
 import utils.config as config
 import RPi.GPIO as GPIO
 from utils.functions import *
-import unirest
 
 
 def init_gpio():
@@ -20,18 +20,22 @@ def init_gpio():
     GPIO.output(config.PIN_NUMBER_LED, False)
 
 
-def update_from_central_database():
-    response = unirest.get(config.REST_ADRESSE + 'tracks',
-                           headers={"Accept": "application/json"})
-    if response.code == 200:
-        for json_object in response.body:
-            track = Track()
-            track.from_json(json_object)
-            db_session.add(track)
-            db_session.commit()
+def main(argv):
+    try:
+        opts, args = getopt.getopt(argv, "", [])
+    except getopt.GetoptError:
+        exit()
 
+    update_from_central_database()
 
-def main():
+    track_id = 1
+    if len(args) == 1:
+        track_id = args[1]
+
+    qry = db_session.query().filter(Track.id == track_id)
+    track = qry.one()
+
+    update_from_central_database()
     init_gpio()
 
     engine.connect()
@@ -43,10 +47,10 @@ def main():
             stop = False
 
             print("Push button to start")
-            GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
+            # GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
 
             # create new session and insert it
-            track_session = start_track_session(1)
+            track_session = start_track_session(track.id)
 
             GPIO.add_event_detect(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
             GPIO.output(config.PIN_NUMBER_LED, True)
@@ -84,4 +88,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1:])
