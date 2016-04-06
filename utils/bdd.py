@@ -5,7 +5,7 @@ import config
 import unirest
 from beans.track import Track
 from beans.session import Session
-from datetime import date
+from datetime import date, datetime
 
 
 def update_from_central_database():
