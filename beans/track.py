@@ -17,9 +17,9 @@ class Track(Base):
         return '{id: ' + str(self.id) + ', name: ' + str(self.name) + '}'
 
     def to_json(self):
-        return json.dumps({
+        return {
             'id': self.id,
             'name': self.name
-        })
+        }
 
 Base.metadata.create_all(engine)

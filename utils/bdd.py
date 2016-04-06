@@ -7,6 +7,7 @@ from beans.track import Track
 from beans.session import Session
 from datetime import date, datetime
 import json
+from utils.AlchemyEncoder import *
 
 
 def update_from_central_database():
@@ -31,9 +32,9 @@ def update_from_central_database():
 
 def send_to_central_database():
     ret = db_session.query(Session).all()
-    # print("RET : " + ret)
-    j = json.dumps([dict(r) for r in ret])
-    print("JSON " + j)
+
+    print json.dumps(ret, cls=new_alchemy_encoder(False, []), check_circular=False)
+
     unirest.post(config.REST_ADDRESS + 'sessions', headers={"Accept": "application/json"}, params=j)
 
 

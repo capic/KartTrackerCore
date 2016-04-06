@@ -24,7 +24,7 @@ class GPSData(Base):
             self.date_time) + ', session_id: ' + str(self.session_id) + '}'
 
     def to_json(self):
-        return json.dumps({
+        return {
             'id': self.id,
             'latitude': self.latitude,
             'longitude': self.longitude,
@@ -32,6 +32,6 @@ class GPSData(Base):
             'date_time': self.date_time,
             'session_id': self.session_id,
             'session': self.session.to_json() if self.session is not None else None
-        })
+        }
 
 Base.metadata.create_all(engine)

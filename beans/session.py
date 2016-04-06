@@ -26,7 +26,7 @@ class Session(Base):
             self.track_id) + '}'
 
     def to_json(self):
-        return json.dumps({
+        return {
             'id': self.id,
             'id_day_session': self.id_day_session,
             'date_session': self.date_session,
@@ -34,7 +34,7 @@ class Session(Base):
             'end_time': self.end_time,
             'track_id': self.track_id,
             'track': self.track.to_json() if self.track is not None else None
-        })
+        }
 
 Base.metadata.create_all(engine)
 
