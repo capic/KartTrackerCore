@@ -24,7 +24,7 @@ def main(argv):
         opts, args = getopt.getopt(argv, "", [])
     except getopt.GetoptError:
         exit()
-
+    send_to_central_database()
     update_from_central_database()
 
     track_id = 1
