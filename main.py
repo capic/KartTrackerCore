@@ -2,6 +2,7 @@ __author__ = 'Vincent'
 
 from gps import *
 from beans.gps_datas import GPSData
+from beans.track import Track
 from utils.bdd import *
 import utils.config as config
 import RPi.GPIO as GPIO
@@ -22,6 +23,12 @@ def init_gpio():
 def update_from_central_database():
     response = unirest.get(config.REST_ADRESSE + 'tracks',
                            headers={"Accept": "application/json"})
+    if response.code == 200:
+        for json_object in response.body:
+            track = Track()
+            track.from_json(json_object)
+            db_session.add(track)
+            db_session.commit()
 
 
 def main():
