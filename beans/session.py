@@ -19,8 +19,8 @@ class Session(Base):
     track = relationship(Track)
 
     def __repr__(self):
-        return '{id: ' + str(self.id) + ', id_day_session: ' + str(self.id_day_session) + 'date_session: ' + str(
-            self.date_session) + 'name: ' + str(self.name) + ', start_time: ' + str(
+        return '{id: ' + str(self.id) + ', id_day_session: ' + str(self.id_day_session) + ', date_session: ' + str(
+            self.date_session) + ', name: ' + str(self.name) + ', start_time: ' + str(
             self.start_time) + ', end_time: ' + str(self.end_time) + ', track_id: ' + str(
             self.track_id) + '}'
 
