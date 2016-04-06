@@ -11,6 +11,8 @@ from datetime import date, datetime
 def update_from_central_database():
     response = unirest.get(config.REST_ADDRESS + 'tracks',
                            headers={"Accept": "application/json"})
+
+    tracks_list = []
     if response.code == 200:
         for json_object in response.body:
             track = Track()
@@ -21,6 +23,14 @@ def update_from_central_database():
                 db_session.commit()
             else:
                 print("Track exists => nothing to do")
+            tracks_list.append(track)
+
+    return tracks_list
+
+
+def send_to_central_database():
+    print(db_session.query(Session).all())
+    # unirest.post(config.REST_ADDRESS + 'sessions', headers={"Accept": "application/json"}, params=)
 
 
 def start_track_session(track_id):
