@@ -31,7 +31,7 @@ def update_from_central_database():
 
 def send_to_central_database():
     ret = db_session.query(Session).all()
-    print("RET : " + ret)
+    # print("RET : " + ret)
     j = json.dumps(ret)
     print("JSON " + j)
     unirest.post(config.REST_ADDRESS + 'sessions', headers={"Accept": "application/json"}, params=j)
