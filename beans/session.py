@@ -24,6 +24,9 @@ class Session(Base):
             self.start_time) + ', end_time: ' + str(self.end_time) + ', track_id: ' + str(
             self.track_id) + '}'
 
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
 Base.metadata.create_all(engine)
 
 

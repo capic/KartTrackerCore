@@ -22,5 +22,7 @@ class GPSData(Base):
             self.longitude) + ', speed: ' + str(self.speed) + ', date_time: ' + str(
             self.date_time) + ', session_id: ' + str(self.session_id) + '}'
 
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 Base.metadata.create_all(engine)
