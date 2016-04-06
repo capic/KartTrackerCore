@@ -14,8 +14,12 @@ def update_from_central_database():
         for json_object in response.body:
             track = Track()
             track.from_json(json_object)
-            db_session.add(track)
-            db_session.commit()
+            if db_session.query(Track).filter(Track.id == track.id).one().id is None:
+                print("Track doesn't exist => insert")
+                db_session.add(track)
+                db_session.commit()
+            else:
+                print("Track exists => nothing to do")
 
 
 def start_track_session(track_id):
