@@ -28,7 +28,9 @@ def new_alchemy_encoder(revisit_self = False, fields_to_expand = []):
                             fields[field] = None
                             continue
 
-                    fields[field] = val
+                    # fields[field] = val
+
+                    fields[field] = val.isoformat() if hasattr(val, 'isoformat') else val
                 # a json-encodable dict
                 return fields
 
