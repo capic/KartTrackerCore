@@ -1,5 +1,6 @@
 __author__ = 'Vincent'
 from sqlalchemy.ext.declarative import DeclarativeMeta
+import json
 
 
 def new_alchemy_encoder(revisit_self = False, fields_to_expand = []):
