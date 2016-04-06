@@ -15,7 +15,5 @@ class Track(Base):
     def __repr__(self):
         return '{id: ' + str(self.id) + ', name: ' + str(self.name) + '}'
 
-    def as_dict(self):
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 Base.metadata.create_all(engine)
