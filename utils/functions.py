@@ -2,6 +2,8 @@ __author__ = 'Vincent'
 from utils.bdd import *
 from beans.session import Session
 from datetime import datetime, date
+import netifaces
+
 
 def start_track_session(track_id):
     track_session = Session()
@@ -34,3 +36,6 @@ def end_track_session(track_session):
     db_session.commit()
 
 
+def is_interface_up(interface):
+    addr = netifaces.ifaddresses(interface)
+    return netifaces.AF_INET in addr

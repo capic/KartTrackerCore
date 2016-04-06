@@ -6,6 +6,7 @@ from utils.bdd import *
 import utils.config as config
 import RPi.GPIO as GPIO
 from utils.functions import *
+import unirest
 
 
 def init_gpio():
@@ -16,6 +17,11 @@ def init_gpio():
 
     GPIO.output(config.PIN_NUMBER_RUNING, False)
     GPIO.output(config.PIN_NUMBER_LED, False)
+
+
+def update_from_central_database():
+    response = unirest.get(config.REST_ADRESSE + 'tracks',
+                           headers={"Accept": "application/json"})
 
 
 def main():
