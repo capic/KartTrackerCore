@@ -33,7 +33,7 @@ def update_from_central_database():
 def send_to_central_database():
     ret = db_session.query(Session).all()
 
-    print json.dumps(ret, cls=new_alchemy_encoder(False, []), check_circular=False)
+    print json.dumps(ret, cls=new_alchemy_encoder(False, ['parents']), check_circular=False)
 
     unirest.post(config.REST_ADDRESS + 'sessions', headers={"Accept": "application/json"}, params=j)
 

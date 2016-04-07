@@ -3,7 +3,7 @@ from sqlalchemy.ext.declarative import DeclarativeMeta
 import json
 
 
-def new_alchemy_encoder(revisit_self = False, fields_to_expand = []):
+def new_alchemy_encoder(revisit_self=False, fields_to_expand=[]):
     _visited_objs = []
 
     class AlchemyEncoder(json.JSONEncoder):
