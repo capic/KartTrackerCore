@@ -1,6 +1,7 @@
 __author__ = 'Vincent'
 from sqlalchemy.ext.declarative import DeclarativeMeta
 import json
+import utils.log as log
 
 
 def new_alchemy_encoder(revisit_self=False, fields_to_expand=[]):
@@ -30,6 +31,7 @@ def new_alchemy_encoder(revisit_self=False, fields_to_expand=[]):
 
                     # fields[field] = val
 
+                    log.log("val %s isoformat: %s" % (val, val.isoformat() if hasattr(val, 'isoformat') else ""), log.LEVEL_DEBUG)
                     fields[field] = val.isoformat() if hasattr(val, 'isoformat') else val
                 # a json-encodable dict
                 return fields
