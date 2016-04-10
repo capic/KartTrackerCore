@@ -13,7 +13,7 @@ REST_ADDRESS = "http://192.168.1.101:4000/"
 CONFIG_LOG_LEVEL = 0
 CONFIG_LOG_LEVEL_LOGGING = 0
 
-CONFIG_FILE = 'conf/conf.cfg'
+CONFIG_FILE = '/home/pi/KartTracker/conf/conf.cfg'
 
 LOG_OUTPUT = True
 CONSOLE_OUTPUT = True
