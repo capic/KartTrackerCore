@@ -32,13 +32,13 @@ def log(value, level):
     if config.CONFIG_LOG_LEVEL > LEVEL_OFF:
         if config.LOG_OUTPUT:
             if level == LEVEL_ALERT:
-                logging.critical(value)
+                logging.critical("[ALERT] " + value)
             elif level == LEVEL_ERROR:
-                logging.error(value)
+                logging.error("[ERROR] " + value)
             elif level == LEVEL_INFO:
-                logging.info(value)
+                logging.info("[INFO] " + value)
             elif level == LEVEL_DEBUG:
-                logging.debug(value)
+                logging.debug("[DEBUG] " + value)
 
         if config.CONSOLE_OUTPUT:
             if level <= config.CONFIG_LOG_LEVEL:
