@@ -25,16 +25,16 @@ class Session(Base):
             self.start_time) + ', end_time: ' + str(self.end_time) + ', track_id: ' + str(
             self.track_id) + '}'
 
-    def to_json(self):
-        return {
-            'id': self.id,
-            'id_day_session': self.id_day_session,
-            'date_session': self.date_session,
-            'start_time': self.start_time,
-            'end_time': self.end_time,
-            'track_id': self.track_id,
-            'track': self.track.to_json() if self.track is not None else None
-        }
+    # def to_json(self):
+    #     return {
+    #         'id': self.id,
+    #         'id_day_session': self.id_day_session,
+    #         'date_session': self.date_session,
+    #         'start_time': self.start_time,
+    #         'end_time': self.end_time,
+    #         'track_id': self.track_id,
+    #         'track': self.track.to_json() if self.track is not None else None
+    #     }
 
 Base.metadata.create_all(engine)
 
