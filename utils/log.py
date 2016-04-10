@@ -13,7 +13,7 @@ LEVEL_DEBUG = 4
 logging.basicConfig(filename='/home/pi/karttracker.log', level=config.CONFIG_LOG_LEVEL_LOGGING,
                     format='%(asctime)s %(message)s',
                     datefmt='%d/%m/%Y %H:%M:%S')
-logging.info("\r\n")
+logging.info("\r\n\r\n\r\n\r\n\r\n")
 
 
 def convert_log_level_to_logging_level():
