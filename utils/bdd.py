@@ -25,7 +25,7 @@ def update_from_central_database():
 
             ret = db_session.query(Track).filter(Track.id == track.id).all()
             if len(ret) == 0:
-                log.log("Track doesn't exist => insert %s" % track, log.LEVEL_DEBUG)
+                log.log("Track doesn't exist => insert", log.LEVEL_DEBUG)
                 db_session.add(track)
                 db_session.commit()
             else:
