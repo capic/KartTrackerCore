@@ -72,7 +72,7 @@ def main(argv):
         log.log("No track id chosen", log.LEVEL_ERROR)
         exit()
 
-    track_id = args[1]
+    track_id = args[0]
     track = db_session.query(Track).filter(Track.id == track_id).one()
 
     init_gpio()
