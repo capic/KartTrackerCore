@@ -7,7 +7,7 @@ from beans.track import Track
 import utils.config as config
 import RPi.GPIO as GPIO
 from utils.bdd import *
-from utils.log import *
+import utils.log as log
 import os
 
 

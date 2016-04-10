@@ -8,7 +8,7 @@ from beans.session import Session
 from datetime import date, datetime
 import json
 from utils.AlchemyEncoder import *
-from utils.log import *
+import utils.log as log
 
 
 def update_from_central_database():
