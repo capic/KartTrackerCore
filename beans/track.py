@@ -5,7 +5,7 @@ import json
 
 
 class Track(Base):
-    __tablename__ = 'Tracks'
+    __tablename__ = 'Track'
     id = Column(Integer, primary_key=True)
     name = Column(String)
 

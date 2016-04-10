@@ -8,7 +8,7 @@ import json
 
 
 class Session(Base):
-    __tablename__ = 'Sessions'
+    __tablename__ = 'Session'
     id = Column(Integer, primary_key=True)
     id_day_session = Column(Integer)
     date_session = Column(Date)
@@ -16,7 +16,7 @@ class Session(Base):
     start_time = Column(Time)
     end_time = Column(Time)
 
-    track_id = Column(Integer, ForeignKey('Tracks.id'))
+    track_id = Column(Integer, ForeignKey('Track.id'))
     track = relationship(Track)
 
     def __repr__(self):

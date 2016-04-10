@@ -8,14 +8,14 @@ import json
 
 
 class GPSData(Base):
-    __tablename__ = 'GpsDatas'
+    __tablename__ = 'GpsData'
     id = Column(Integer, primary_key=True)
     latitude = Column(Float)
     longitude = Column(Float)
     speed = Column(Float)
     date_time = Column(String)
 
-    session_id = Column(Integer, ForeignKey('Sessions.id'))
+    session_id = Column(Integer, ForeignKey('Session.id'))
     session = relationship(Session)
 
     def __repr__(self):
