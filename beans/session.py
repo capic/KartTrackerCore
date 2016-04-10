@@ -8,7 +8,7 @@ import json
 
 
 class Session(Base):
-    __tablename__ = 'Session'
+    __tablename__ = 'session'
     id = Column(Integer, primary_key=True)
     id_day_session = Column(Integer)
     date_session = Column(Date)

@@ -8,7 +8,7 @@ import json
 
 
 class GPSData(Base):
-    __tablename__ = 'GpsData'
+    __tablename__ = 'gps_data'
     id = Column(Integer, primary_key=True)
     latitude = Column(Float)
     longitude = Column(Float)
