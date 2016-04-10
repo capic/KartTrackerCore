@@ -22,7 +22,9 @@ def init_gpio():
 
 
 def init_config():
+    print("init_config with file %s " % config.CONFIG_FILE, log.LEVEL_INFO)
     if os.path.isfile(config.CONFIG_FILE):
+        print("config file found", log.LEVEL_DEBUG)
         config_object = {}
         execfile(config.CONFIG_FILE, config_object)
 
