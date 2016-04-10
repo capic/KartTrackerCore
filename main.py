@@ -68,7 +68,7 @@ def main(argv):
 
     update_from_central_database()
 
-    log.log("Number of arguments " + len(args), log.LEVEL_DEBUG)
+    log.log("Number of arguments %d" % len(args), log.LEVEL_DEBUG)
     if len(args) != 2:
         log.log("No track id chosen", log.LEVEL_ERROR)
         exit()
