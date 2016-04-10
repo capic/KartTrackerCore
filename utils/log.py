@@ -38,4 +38,15 @@ def log(value, level):
 
         if config.CONSOLE_OUTPUT:
             if level <= config.CONFIG_LOG_LEVEL:
-                print(time.strftime('%d/%m/%y %H:%M:%S', time.localtime()) + " " + value)
+                log_to_print = ""
+                if level == LEVEL_ALERT:
+                    log_to_print += "[ALERT]"
+                elif level == LEVEL_ERROR:
+                    log_to_print += "[ERROR]"
+                elif level == LEVEL_INFO:
+                    log_to_print += "[INFO]"
+                elif level == LEVEL_DEBUG:
+                    log_to_print += "[DEBUG]"
+
+                log_to_print += time.strftime('%d/%m/%y %H:%M:%S', time.localtime()) + " " + value
+                print(log_to_print)
