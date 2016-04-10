@@ -10,6 +10,10 @@ LEVEL_ERROR = 2
 LEVEL_INFO = 3
 LEVEL_DEBUG = 4
 
+logging.basicConfig(filename='/home/pi/karttracker.log', level=config.CONFIG_LOG_LEVEL_LOGGING,
+                    format='%(asctime)s %(message)s',
+                    datefmt='%d/%m/%Y %H:%M:%S')
+
 
 def convert_log_level_to_logging_level():
     if config.CONFIG_LOG_LEVEL == LEVEL_OFF:
