@@ -12,6 +12,8 @@ import utils.log as log
 
 
 def update_from_central_database():
+    log.log("update_from_central_database", log.LEVEL_INFO)
+
     response = unirest.get(config.REST_ADDRESS + 'tracks',
                            headers={"Accept": "application/json"})
 
@@ -23,7 +25,7 @@ def update_from_central_database():
 
             ret = db_session.query(Track).filter(Track.id == track.id).all()
             if len(ret) == 0:
-                log.log("Track doesn't exist => insert", log.LEVEL_DEBUG)
+                log.log("Track doesn't exist => insert %s" % track, log.LEVEL_DEBUG)
                 db_session.add(track)
                 db_session.commit()
             else:
@@ -52,7 +54,7 @@ def start_track_session(track_id):
         Session.date_session == date.today()).filter(Session.track_id == track_id)
     res = qry.one()
 
-    log.log("Already a session for this day and track ? %d" % (len(res) > 0))
+    log.log("Already a session for this day and track ? %d" % (len(res) > 0), log.LEVEL_DEBUG)
     id_day_session = 1
     if res.max_id_day_session is not None:
         id_day_session = res.max_id_day_session + 1
