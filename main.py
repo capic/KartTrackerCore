@@ -86,7 +86,7 @@ def main(argv):
             stop = False
 
             print("Push button to start")
-            # GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
+            GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
 
             # create new session and insert it
             track_session = start_track_session(track.id)
