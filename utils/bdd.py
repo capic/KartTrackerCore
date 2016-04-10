@@ -17,16 +17,17 @@ def update_from_central_database():
 
     tracks_list = []
     if response.code == 200:
-        log.log("Response body: %s" % response.body, log.LEVEL_DEBUG)
         for json_object in response.body:
             track = Track()
             track.from_json(json_object)
-            if db_session.query(Track).filter(Track.id == track.id).one().id is None:
-                print("Track doesn't exist => insert")
+
+            ret = db_session.query(Track).filter(Track.id == track.id).one()
+            if len(ret) == 0:
+                log.log("Track doesn't exist => insert", log.LEVEL_DEBUG)
                 db_session.add(track)
                 db_session.commit()
             else:
-                print("Track exists => nothing to do")
+                log.log("Track exists => nothing to do", log.LEVEL_DEBUG)
             tracks_list.append(track)
 
     return tracks_list
