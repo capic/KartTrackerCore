@@ -56,6 +56,7 @@ def init_config():
 
 def main(argv):
     try:
+        print(argv)
         opts, args = getopt.getopt(argv, "", [])
     except getopt.GetoptError:
         exit()
