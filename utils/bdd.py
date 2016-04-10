@@ -17,6 +17,7 @@ def update_from_central_database():
 
     tracks_list = []
     if response.code == 200:
+        log.log("Response body: %s" % response.body, log.LEVEL_DEBUG)
         for json_object in response.body:
             track = Track()
             track.from_json(json_object)
