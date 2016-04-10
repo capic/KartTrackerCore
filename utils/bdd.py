@@ -8,6 +8,7 @@ from beans.session import Session
 from datetime import date, datetime
 import json
 from utils.AlchemyEncoder import *
+from utils.log import *
 
 
 def update_from_central_database():
@@ -31,21 +32,25 @@ def update_from_central_database():
 
 
 def send_to_central_database():
+    log.log("send_to_central_database", log.LEVEL_INFO)
     ret = db_session.query(Session).all()
 
-    j = json.dumps(ret, cls=new_alchemy_encoder(False, ['Session']), check_circular=False)
-    print(j)
-
-    unirest.post(config.REST_ADDRESS + 'sessions', headers={"Accept": "application/json"}, params=j)
+    log.log("Number of session to send: %d" % len(ret), log.LEVEL_DEBUG)
+    if len(ret) > 0:
+        json_sessions = json.dumps(ret, cls=new_alchemy_encoder(False, ['Session']), check_circular=False)
+        unirest.post(config.REST_ADDRESS + 'sessions', headers={"Accept": "application/json"}, params=json_sessions)
 
 
 def start_track_session(track_id):
+    log.log("start_track_session", log.LEVEL_INFO)
+    log.log("Track id: %d" % track_id, log.LEVEL_DEBUG)
     track_session = Session()
 
     qry = db_session.query(func.max(Session.id_day_session).label("max_id_day_session")).filter(
         Session.date_session == date.today()).filter(Session.track_id == track_id)
     res = qry.one()
 
+    log.log("Already a session for this day and track ? %d" % (len(res) > 0))
     id_day_session = 1
     if res.max_id_day_session is not None:
         id_day_session = res.max_id_day_session + 1
@@ -56,7 +61,7 @@ def start_track_session(track_id):
     track_session.id_day_session = id_day_session
     track_session.start_time = datetime.utcnow().time()
 
-    print("Insert: " + str(track_session))
+    log.log("Insert: %s" % str(track_session), log.LEVEL_DEBUG)
     db_session.add(track_session)
     db_session.commit()
 
@@ -64,7 +69,8 @@ def start_track_session(track_id):
 
 
 def end_track_session(track_session):
+    log.log("end_track_session", log.LEVEL_INFO)
     # update the session with end date time
     track_session.end_date_time = datetime.utcnow().time()
-    print("Update: " + str(track_session))
+    log.log("Update: %s" % str(track_session), log.LEVEL_DEBUG)
     db_session.commit()
