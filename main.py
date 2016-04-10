@@ -56,6 +56,7 @@ def main(argv):
 
     init_config()
 
+    log.log("Starting ....", log.LEVEL_INFO)
     send_to_central_database()
     update_from_central_database()
 
