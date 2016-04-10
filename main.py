@@ -67,9 +67,8 @@ def main(argv):
     send_to_central_database()
 
     update_from_central_database()
-    print(opts)
-    print(args)
-    if len(args) != 2:
+
+    if len(args) != 1:
         log.log("No track id chosen", log.LEVEL_ERROR)
         exit()
 
