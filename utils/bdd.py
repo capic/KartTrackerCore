@@ -21,7 +21,7 @@ def update_from_central_database():
             track = Track()
             track.from_json(json_object)
 
-            ret = db_session.query(Track).filter(Track.id == track.id).one()
+            ret = db_session.query(Track).filter(Track.id == track.id).all()
             if len(ret) == 0:
                 log.log("Track doesn't exist => insert", log.LEVEL_DEBUG)
                 db_session.add(track)
