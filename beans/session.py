@@ -16,7 +16,7 @@ class Session(Base):
     start_time = Column(Time)
     end_time = Column(Time)
 
-    track_id = Column(Integer, ForeignKey('Track.id'))
+    track_id = Column(Integer, ForeignKey('track.id'))
     track = relationship(Track)
 
     def __repr__(self):
