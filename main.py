@@ -70,7 +70,6 @@ def main(argv):
     qry = db_session.query(Track).filter(Track.id == track_id)
     track = qry.one()
 
-    update_from_central_database()
     init_gpio()
 
     engine.connect()
