@@ -22,9 +22,9 @@ def init_gpio():
 
 
 def init_config():
-    print("init_config with file %s " % config.CONFIG_FILE, log.LEVEL_INFO)
+    print("init_config with file %s " % config.CONFIG_FILE)
     if os.path.isfile(config.CONFIG_FILE):
-        print("config file found", log.LEVEL_DEBUG)
+        print("config file found")
         config_object = {}
         execfile(config.CONFIG_FILE, config_object)
 
@@ -48,7 +48,8 @@ def init_config():
         log.log("Rest Address: %s" % config.REST_ADRESSE, log.LEVEL_DEBUG)
         log.log("Log output %s" % str(config.LOG_OUTPUT), log.LEVEL_DEBUG)
         log.log("Console output %s" % str(config.CONSOLE_OUTPUT), log.LEVEL_DEBUG)
-
+    else:
+        print("config file not found")
 
 def main(argv):
     try:
