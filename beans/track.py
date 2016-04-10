@@ -1,7 +1,6 @@
 __author__ = 'Vincent'
 from sqlalchemy import Column, Integer, String
 from utils.bdd_base import Base, engine
-import json
 
 
 class Track(Base):
@@ -15,11 +14,5 @@ class Track(Base):
 
     def __repr__(self):
         return '{id: ' + str(self.id) + ', name: ' + str(self.name) + '}'
-
-    def to_json(self):
-        return {
-            'id': self.id,
-            'name': self.name
-        }
 
 Base.metadata.create_all(engine)
