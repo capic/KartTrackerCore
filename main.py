@@ -56,8 +56,8 @@ def program_waiting():
     led_on()
 
 
-def program_running(stop):
-    flash_led(stop)
+def program_running(start, stop):
+    flash_led(start, stop)
 
 
 def main(argv):

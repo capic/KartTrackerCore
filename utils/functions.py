@@ -10,7 +10,7 @@ def is_interface_up(interface):
     return netifaces.AF_INET in addr
 
 
-def flash_led(stop):
+def flash_led(start, stop):
     while not stop.isSet():
         GPIO.output(config.PIN_NUMBER_LED, False)
         time.sleep(0.5)
