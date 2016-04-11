@@ -5,6 +5,7 @@ import config
 import unirest
 from beans.track import Track
 from beans.session import Session
+from beans.gps_datas import GPSData
 from datetime import date, datetime
 import json
 from utils.AlchemyEncoder import *
@@ -37,7 +38,7 @@ def update_from_central_database():
 
 def send_to_central_database():
     log.log("send_to_central_database", log.LEVEL_INFO)
-    ret = db_session.query(Session).all()
+    ret = db_session.query(Session).join(GPSData).all()
 
     log.log("Number of session to send: %d" % len(ret), log.LEVEL_DEBUG)
     if len(ret) > 0:

@@ -90,9 +90,12 @@ def main(argv):
     stop_blinking = threading.Event()
     t = threading.Thread(name='non-block', target=program_running, args=(stop_blinking, ))
 
+    stop_program = False
+
     try:
-        while True:
-            stop = False
+        # il faut pouvoir arreter le programme depuis l'interface
+        while not stop_program:
+            stop_recording = False
 
             print("Push button to start")
             GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
@@ -103,7 +106,7 @@ def main(argv):
             GPIO.add_event_detect(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
             t.start()
 
-            while not stop:
+            while not stop_recording:
                 # get the gps datas
                 if session.waiting():
                     datas = session.next()
@@ -119,7 +122,7 @@ def main(argv):
 
                 if GPIO.event_detected(config.PIN_NUMBER_BUTTON):
                     log.log("Event detected stop recording !!!", log.LEVEL_DEBUG)
-                    stop = True
+                    stop_recording = True
 
             GPIO.remove_event_detect(config.PIN_NUMBER_BUTTON)
             stop_blinking.set()
@@ -133,7 +136,6 @@ def main(argv):
     finally:
         log.log("Cleanup program", log.LEVEL_INFO)
         session = None
-        GPIO.output(config.PIN_NUMBER_RUNING, True)
         GPIO.cleanup()
 
 
