@@ -11,7 +11,7 @@ def is_interface_up(interface):
 
 
 def flash_led(start, stop):
-    while not stop.isSet():
+    while start.isSet():
         GPIO.output(config.PIN_NUMBER_LED, False)
         time.sleep(0.5)
         GPIO.output(config.PIN_NUMBER_LED, True)
