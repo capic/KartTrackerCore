@@ -2,6 +2,7 @@ __author__ = 'Vincent'
 import netifaces
 import RPi.GPIO as GPIO
 import time
+import utils.config as config
 
 
 def is_interface_up(interface):

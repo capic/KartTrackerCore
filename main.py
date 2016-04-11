@@ -3,9 +3,6 @@ __author__ = 'Vincent'
 import getopt
 from gps import *
 from beans.gps_datas import GPSData
-from beans.track import Track
-import utils.config as config
-import RPi.GPIO as GPIO
 from utils.bdd import *
 import utils.log as log
 from utils.functions import *
