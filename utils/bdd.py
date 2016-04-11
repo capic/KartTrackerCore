@@ -43,7 +43,10 @@ def send_to_central_database():
     log.log("Number of session to send: %d" % len(ret), log.LEVEL_DEBUG)
     if len(ret) > 0:
         json_sessions = json.dumps(ret, cls=new_alchemy_encoder(False, ['Session']), check_circular=False)
-        unirest.post(config.REST_ADDRESS + 'sessions', headers={"Accept": "application/json"}, params=json_sessions)
+        response = unirest.post(config.REST_ADDRESS + 'sessions', headers={"Accept": "application/json"}, params=json_sessions)
+
+        if response.code != 200:
+            log.log("Erreur d'insertion: %s" % response.body, log.LEVEL_ERROR)
 
 
 def start_track_session(track_id):
