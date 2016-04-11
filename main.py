@@ -90,6 +90,7 @@ def main(argv):
     stop_blinking = threading.Event()
     t = threading.Thread(name='non-block', target=program_running, args=(stop_blinking, ))
     t.start()
+    stop_blinking.set()
 
     stop_program = False
 
@@ -97,11 +98,11 @@ def main(argv):
         # il faut pouvoir arreter le programme depuis l'interface
         while not stop_program:
             stop_recording = False
-            stop_blinking.clear()
 
             print("Push button to start")
             GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
 
+            stop_blinking.clear()
             # create new session and insert it
             track_session = start_track_session(track.id)
 
