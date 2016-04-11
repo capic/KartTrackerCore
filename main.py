@@ -88,7 +88,7 @@ def main(argv):
     program_waiting()
 
     stop_blinking = threading.Event()
-    t = threading.Thread(name='non-block', target=program_running, args=(stop_blinking))
+    t = threading.Thread(name='non-block', target=program_running, args=(stop_blinking, ))
 
     try:
         while True:
