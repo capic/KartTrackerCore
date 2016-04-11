@@ -42,7 +42,7 @@ def send_to_central_database():
 
     log.log("Number of session to send: %d" % len(ret), log.LEVEL_DEBUG)
     if len(ret) > 0:
-        json_sessions = json.dumps(ret, cls=new_alchemy_encoder(False, ['Session']), check_circular=False)
+        json_sessions = json.dumps(ret, cls=new_alchemy_encoder(False, ['Session', 'GPSData']), check_circular=False)
         response = unirest.post(config.REST_ADDRESS + 'sessions', headers={"Accept": "application/json"}, params=json_sessions)
 
         if response.code != 200:
