@@ -53,12 +53,11 @@ def init_config():
 
 
 def program_waiting():
-    flash_led(True)
     led_on()
 
 
-def program_running():
-    flash_led(False)
+def program_running(stop):
+    flash_led(stop)
 
 
 def main(argv):
@@ -88,8 +87,8 @@ def main(argv):
     session = gps(mode=WATCH_ENABLE)
     program_waiting()
 
-    e = threading.Event()
-    t = threading.Thread(name='non-block', target=program_running)
+    stop_blinking = threading.Event()
+    t = threading.Thread(name='non-block', target=program_running, args=(stop_blinking))
 
     try:
         while True:
@@ -123,6 +122,7 @@ def main(argv):
                     stop = True
 
             GPIO.remove_event_detect(config.PIN_NUMBER_BUTTON)
+            stop_blinking.set()
             program_waiting()
 
             end_track_session(track_session)
