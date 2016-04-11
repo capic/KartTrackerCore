@@ -8,7 +8,10 @@ import utils.config as config
 import RPi.GPIO as GPIO
 from utils.bdd import *
 import utils.log as log
+from utils.functions import *
 import os
+import threading
+
 
 
 def init_gpio():
@@ -54,6 +57,16 @@ def init_config():
     else:
         print("config file not found")
 
+
+def program_waiting():
+    flash_led(True)
+    led_on()
+
+
+def program_running():
+    flash_led(False)
+
+
 def main(argv):
     try:
         opts, args = getopt.getopt(argv, "", [])
@@ -79,7 +92,10 @@ def main(argv):
 
     engine.connect()
     session = gps(mode=WATCH_ENABLE)
-    GPIO.output(config.PIN_NUMBER_RUNING, True)
+    program_waiting()
+
+    e = threading.Event()
+    t = threading.Thread(name='non-block', target=program_running)
 
     try:
         while True:
@@ -92,7 +108,7 @@ def main(argv):
             track_session = start_track_session(track.id)
 
             GPIO.add_event_detect(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
-            GPIO.output(config.PIN_NUMBER_LED, True)
+            t.start()
 
             while not stop:
                 # get the gps datas
@@ -113,7 +129,7 @@ def main(argv):
                     stop = True
 
             GPIO.remove_event_detect(config.PIN_NUMBER_BUTTON)
-            GPIO.output(config.PIN_NUMBER_LED, False)
+            program_waiting()
 
             end_track_session(track_session)
     except KeyError:
