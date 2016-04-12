@@ -15,7 +15,7 @@ class Session(Base):
     start_time = Column(Time)
     end_time = Column(Time)
 
-    gps_datas = relationship(GPSData)
+    gps_datas = relationship("GPSData")
     session_id = Column(Integer, ForeignKey('track.id'))
 
     def __repr__(self):
