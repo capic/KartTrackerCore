@@ -14,7 +14,6 @@ class GPSData(Base):
     date_time = Column(String)
 
     session_id = Column(Integer, ForeignKey('session.id'))
-    session = relationship("Session", back_populates="gps_data")
 
     # def __repr__(self):
     #     return '{id: ' + str(self.id) + ', latitude: ' + str(self.latitude) + ', longitude: ' + str(
