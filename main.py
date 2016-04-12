@@ -103,8 +103,7 @@ def main(argv):
                 if datas['class'] == "TPV":
                     # create gps datas and insert it
                     gps_data = GPSData(latitude=session.fix.latitude, longitude=session.fix.longitude,
-                                       speed=session.fix.speed, date_time=session.fix.time, session_id=track_session.id,
-                                       session=track_session)
+                                       speed=session.fix.speed, date_time=session.fix.time, session_id=track_session.id)
                     log.log("Insert: " + str(gps_data), log.LEVEL_DEBUG)
                     db_session.add(gps_data)
                     db_session.commit()
