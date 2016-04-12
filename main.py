@@ -80,7 +80,6 @@ def main(argv):
     led.turn_on()
 
     e = threading.Event()
-    e.set()
 
     led.blink(0.5, e)
 
@@ -118,8 +117,8 @@ def main(argv):
 
             GPIO.remove_event_detect(config.PIN_NUMBER_BUTTON)
             log.log("Stop blinking ...", log.LEVEL_DEBUG)
-
-            led.led_on()
+            e.set()
+            led.turn_on()
 
             end_track_session(track_session)
     except KeyError:
