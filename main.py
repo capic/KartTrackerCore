@@ -56,8 +56,8 @@ def program_waiting():
     led_on()
 
 
-def program_running(start, stop):
-    flash_led(start, stop)
+def program_running(start):
+    flash_led(start)
 
 
 def main(argv):
@@ -88,8 +88,7 @@ def main(argv):
     program_waiting()
 
     start_blinking = threading.Event()
-    stop_blinking = threading.Event()
-    t = threading.Thread(name='non-block', target=program_running, args=(start_blinking, stop_blinking))
+    t = threading.Thread(name='non-block', target=program_running, args=(start_blinking, ))
     t.start()
 
     stop_program = False
@@ -97,7 +96,6 @@ def main(argv):
         # il faut pouvoir arreter le programme depuis l'interface
         while not stop_program:
             stop_recording = False
-            stop_blinking.set()
 
             print("Push button to start")
             GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
@@ -127,7 +125,6 @@ def main(argv):
                     stop_recording = True
 
             GPIO.remove_event_detect(config.PIN_NUMBER_BUTTON)
-            # stop_blinking.set()
             start_blinking.clear()
 
             program_waiting()
