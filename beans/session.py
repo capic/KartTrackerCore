@@ -24,6 +24,6 @@ class Session(Base):
     #         self.start_time) + ', end_time: ' + str(self.end_time) + ', track_id: ' + str(
     #         self.track_id) + '}'
 
-Base.metadata.create_all(engine)
+# Base.metadata.create_all(engine)
 
 

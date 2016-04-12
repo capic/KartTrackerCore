@@ -13,4 +13,4 @@ class Track(Base):
     # def __repr__(self):
     #     return '{id: ' + str(self.id) + ', name: ' + str(self.name) + '}'
 
-Base.metadata.create_all(engine)
+# Base.metadata.create_all(engine)

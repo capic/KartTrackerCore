@@ -21,4 +21,4 @@ class GPSData(Base):
     #         self.longitude) + ', speed: ' + str(self.speed) + ', date_time: ' + str(
     #         self.date_time) + ', session_id: ' + str(self.session_id) + '}'
 
-Base.metadata.create_all(engine)
+# Base.metadata.create_all(engine)
