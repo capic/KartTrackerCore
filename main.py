@@ -126,10 +126,11 @@ def main(argv):
     except StopIteration:
         log.log("GPSD is stopped", log.LEVEL_ERROR)
     finally:
-        log.log("Cleanup program", log.LEVEL_INFO)
         session = None
-        GPIO.cleanup()
         led.turn_off()
+
+    log.log("Cleanup program", log.LEVEL_INFO)
+    GPIO.cleanup()
 
 
 if __name__ == "__main__":
