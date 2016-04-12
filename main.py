@@ -88,8 +88,9 @@ def main(argv):
         while not stop_program:
             stop_recording = False
 
+
             print("Push button to start")
-            GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING, 1000)
+            GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
             e.clear()
             led.blink(0.5, e)
 
@@ -115,6 +116,7 @@ def main(argv):
                 if GPIO.event_detected(config.PIN_NUMBER_BUTTON):
                     log.log("Event detected stop recording !!!", log.LEVEL_DEBUG)
                     stop_recording = True
+                    time.sleep(1000)
 
             GPIO.remove_event_detect(config.PIN_NUMBER_BUTTON)
             log.log("Stop blinking ...", log.LEVEL_DEBUG)
