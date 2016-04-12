@@ -12,34 +12,23 @@ class Led:
         self._GPIOPORT = config.PIN_NUMBER_LED
         GPIO.setwarnings(False)
         GPIO.setup(self._GPIOPORT, GPIO.OUT)
-        # self.flag.set()
 
     def turn_on(self):
-        # self.flag.clear()
-        print 'Turn On ...'
         GPIO.output(self._GPIOPORT, True)
 
     def turn_off(self):
         # self.flag.clear()
-        print 'Turn Off ...'
         GPIO.output(self._GPIOPORT, False)
 
     def blink(self, delay, e):
-        print 'Thread Blink Create ...'
         t1 = threading.Thread(target=self.blink_thread, args=(delay, e))
         t1.start()
-        print 'Thread Started'
 
     def blink_thread(self, delaytime, event):
-        print 'blink_thread Start .... event is set'
-
         while not event.is_set():
-            print('off')
             GPIO.output(self._GPIOPORT, False)
             time.sleep(delaytime)
-            print('on')
             GPIO.output(self._GPIOPORT, True)
             time.sleep(delaytime)
 
         event.wait()
-        print 'blink_thread stop...'
