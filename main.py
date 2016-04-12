@@ -81,8 +81,6 @@ def main(argv):
 
     e = threading.Event()
 
-    led.blink(0.5, e)
-
     stop_program = False
     try:
         # il faut pouvoir arreter le programme depuis l'interface
@@ -91,7 +89,7 @@ def main(argv):
 
             print("Push button to start")
             GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
-
+            led.blink(0.5, e)
             # create new session and insert it
             track_session = start_track_session(track.id)
 
