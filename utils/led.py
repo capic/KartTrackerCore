@@ -11,7 +11,6 @@ flag = threading.Event()
 class Led:
     def __init__(self):
         self._GPIOPORT = config.PIN_NUMBER_LED
-        GPIO.setmode(GPIO.BOARD)
         GPIO.setwarnings(False)
         GPIO.setup(self._GPIOPORT, GPIO.OUT)
         self.flag.set()

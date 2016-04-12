@@ -16,8 +16,6 @@ def init_gpio():
 
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(config.PIN_NUMBER_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    GPIO.setup(config.PIN_NUMBER_LED, GPIO.OUT)
-    GPIO.output(config.PIN_NUMBER_LED, False)
 
 
 def init_config():
