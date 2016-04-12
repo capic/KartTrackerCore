@@ -37,7 +37,7 @@ def send_to_central_database():
     ret = db_session.query(Session, GPSData).join(GPSData).all()
 
     print(ret)
-    exit(-1)
+    # exit(-1)
 
     log.log("Number of session to send: %d" % len(ret), log.LEVEL_DEBUG)
     if len(ret) > 0:
