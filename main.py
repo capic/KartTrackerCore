@@ -8,7 +8,7 @@ import utils.log as log
 from utils.functions import *
 import os
 import threading
-import utils.led as led
+from utils.led import Led
 
 
 def init_gpio():
@@ -78,7 +78,8 @@ def main(argv):
     engine.connect()
     session = gps(mode=WATCH_ENABLE)
 
-    led.turn_on();
+    led = Led()
+    led.turn_on()
 
     e = threading.Event()
     e.set()
