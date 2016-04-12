@@ -56,8 +56,8 @@ def program_waiting():
     led_on()
 
 
-def program_running(start):
-    flash_led(start)
+def program_running(stop_blinking):
+    flash_led(stop_blinking)
 
 
 def main(argv):
@@ -87,9 +87,10 @@ def main(argv):
     session = gps(mode=WATCH_ENABLE)
     program_waiting()
 
-    start_blinking = threading.Event()
-    t = threading.Thread(name='non-block', target=program_running, args=(start_blinking, ))
+    stop_blinking = threading.Event()
+    t = threading.Thread(name='non-block', target=program_running, args=(stop_blinking, ))
     t.start()
+    stop_blinking.set()
 
     stop_program = False
     try:
@@ -100,13 +101,13 @@ def main(argv):
             print("Push button to start")
             GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
 
+            stop_blinking.clear()
+
             # create new session and insert it
             track_session = start_track_session(track.id)
 
             GPIO.add_event_detect(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
 
-            log.log("Start blinking ...", log.LEVEL_DEBUG)
-            start_blinking.set()
             while not stop_recording:
                 # get the gps datas
                 if session.waiting():
@@ -127,7 +128,7 @@ def main(argv):
 
             GPIO.remove_event_detect(config.PIN_NUMBER_BUTTON)
             log.log("Stop blinking ...", log.LEVEL_DEBUG)
-            start_blinking.clear()
+            stop_blinking.set()
 
             program_waiting()
 
