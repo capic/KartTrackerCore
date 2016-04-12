@@ -100,7 +100,6 @@ def main(argv):
 
             print("Push button to start")
             GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
-
             stop_blinking.clear()
 
             # create new session and insert it
