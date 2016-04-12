@@ -55,6 +55,7 @@ def main(argv):
         exit()
 
     init_config()
+    init_gpio()
 
     log.log("Starting ....", log.LEVEL_INFO)
     # TODO: on ne doit envoyer seulement quand on veut importer en base centrale (avec un switch ? ou quand on recupere la connexion ?)
@@ -68,8 +69,6 @@ def main(argv):
 
     track_id = args[0]
     track = db_session.query(Track).filter(Track.id == track_id).one()
-
-    init_gpio()
 
     engine.connect()
     session = gps(mode=WATCH_ENABLE)

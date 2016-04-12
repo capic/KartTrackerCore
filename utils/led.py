@@ -9,7 +9,6 @@ class Led:
     # flag = threading.Event()
 
     def __init__(self):
-        GPIO.setmode(GPIO.BCM)
         self._GPIOPORT = config.PIN_NUMBER_LED
         GPIO.setwarnings(False)
         GPIO.setup(self._GPIOPORT, GPIO.OUT)
