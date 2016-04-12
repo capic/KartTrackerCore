@@ -125,6 +125,7 @@ def main(argv):
         log.log("GPSD is stopped", log.LEVEL_ERROR)
     finally:
         session = None
+        e.set()
         led.turn_off()
 
     log.log("Cleanup program", log.LEVEL_INFO)
