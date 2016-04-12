@@ -8,7 +8,7 @@ class Track(Base):
     __tablename__ = 'track'
     id = Column(Integer, primary_key=True)
     name = Column(String)
-    session = relationship("Session")
+    session = relationship("Session", back_populates="track")
 
     def __repr__(self):
         return '{id: ' + str(self.id) + ', name: ' + str(self.name) + '}'
