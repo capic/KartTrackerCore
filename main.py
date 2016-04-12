@@ -80,7 +80,6 @@ def main(argv):
     led.turn_on()
 
     e = threading.Event()
-    # e.set()
 
     stop_program = False
     try:
