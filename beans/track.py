@@ -10,10 +10,6 @@ class Track(Base):
     name = Column(String)
     session = relationship("Session")
 
-    def from_json(self, json):
-        self.id = json['id']
-        self.name = json['name']
-
     def __repr__(self):
         return '{id: ' + str(self.id) + ', name: ' + str(self.name) + '}'
 

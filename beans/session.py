@@ -2,7 +2,6 @@ __author__ = 'Vincent'
 from sqlalchemy import Column, Integer, String, Date, Time
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
-from gps_datas import GPSData
 from utils.bdd_base import Base, engine
 
 
