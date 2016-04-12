@@ -8,7 +8,7 @@ import utils.log as log
 from utils.functions import *
 import os
 import threading
-
+import utils.led as led
 
 
 def init_gpio():
@@ -52,14 +52,6 @@ def init_config():
         print("config file not found")
 
 
-def program_waiting():
-    led_on()
-
-
-def program_running(stop_blinking):
-    flash_led(stop_blinking)
-
-
 def main(argv):
     try:
         opts, args = getopt.getopt(argv, "", [])
@@ -85,12 +77,13 @@ def main(argv):
 
     engine.connect()
     session = gps(mode=WATCH_ENABLE)
-    program_waiting()
 
-    stop_blinking = threading.Event()
-    t = threading.Thread(name='non-block', target=program_running, args=(stop_blinking, ))
-    t.start()
-    stop_blinking.set()
+    led.turn_on();
+
+    e = threading.Event()
+    e.set()
+
+    led.blink(0.5, e)
 
     stop_program = False
     try:
@@ -100,7 +93,6 @@ def main(argv):
 
             print("Push button to start")
             GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
-            stop_blinking.clear()
 
             # create new session and insert it
             track_session = start_track_session(track.id)
@@ -127,9 +119,8 @@ def main(argv):
 
             GPIO.remove_event_detect(config.PIN_NUMBER_BUTTON)
             log.log("Stop blinking ...", log.LEVEL_DEBUG)
-            stop_blinking.set()
 
-            program_waiting()
+            led.led_on()
 
             end_track_session(track_session)
     except KeyError:
@@ -140,6 +131,7 @@ def main(argv):
         log.log("Cleanup program", log.LEVEL_INFO)
         session = None
         GPIO.cleanup()
+        led.led_off()
 
 
 if __name__ == "__main__":
