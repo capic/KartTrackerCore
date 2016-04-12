@@ -10,7 +10,7 @@ class Track(Base):
     name = Column(String)
     session = relationship("Session", back_populates="track")
 
-    def __repr__(self):
-        return '{id: ' + str(self.id) + ', name: ' + str(self.name) + '}'
+    # def __repr__(self):
+    #     return '{id: ' + str(self.id) + ', name: ' + str(self.name) + '}'
 
 Base.metadata.create_all(engine)

@@ -18,11 +18,11 @@ class Session(Base):
     session_id = Column(Integer, ForeignKey('track.id'))
     session = relationship("Session", back_populates="session")
 
-    def __repr__(self):
-        return '{id: ' + str(self.id) + ', id_day_session: ' + str(self.id_day_session) + ', date_session: ' + str(
-            self.date_session) + ', name: ' + str(self.name) + ', start_time: ' + str(
-            self.start_time) + ', end_time: ' + str(self.end_time) + ', track_id: ' + str(
-            self.track_id) + '}'
+    # def __repr__(self):
+    #     return '{id: ' + str(self.id) + ', id_day_session: ' + str(self.id_day_session) + ', date_session: ' + str(
+    #         self.date_session) + ', name: ' + str(self.name) + ', start_time: ' + str(
+    #         self.start_time) + ', end_time: ' + str(self.end_time) + ', track_id: ' + str(
+    #         self.track_id) + '}'
 
 Base.metadata.create_all(engine)
 
