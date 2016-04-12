@@ -1,8 +1,6 @@
 __author__ = 'Vincent'
 from sqlalchemy import Column, Integer, String, Float
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import relationship
-from session import Session
 from utils.bdd_base import Base, engine
 
 
@@ -15,7 +13,6 @@ class GPSData(Base):
     date_time = Column(String)
 
     session_id = Column(Integer, ForeignKey('session.id'))
-    session = relationship(Session)
 
     def __repr__(self):
         return '{id: ' + str(self.id) + ', latitude: ' + str(self.latitude) + ', longitude: ' + str(

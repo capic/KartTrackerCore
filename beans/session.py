@@ -2,7 +2,7 @@ __author__ = 'Vincent'
 from sqlalchemy import Column, Integer, String, Date, Time
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
-from track import Track
+from gps_datas import GPSData
 from utils.bdd_base import Base, engine
 
 
@@ -15,8 +15,8 @@ class Session(Base):
     start_time = Column(Time)
     end_time = Column(Time)
 
-    track_id = Column(Integer, ForeignKey('track.id'))
-    track = relationship(Track)
+    gps_datas = relationship(GPSData)
+    session_id = Column(Integer, ForeignKey('track.id'))
 
     def __repr__(self):
         return '{id: ' + str(self.id) + ', id_day_session: ' + str(self.id_day_session) + ', date_session: ' + str(
