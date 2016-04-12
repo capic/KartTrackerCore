@@ -89,7 +89,7 @@ def main(argv):
             stop_recording = False
 
             print("Push button to start")
-            GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
+            GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING, 1000)
             e.clear()
             led.blink(0.5, e)
 
