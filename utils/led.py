@@ -6,22 +6,21 @@ import time
 
 
 class Led:
-    flagstop = 0
-    flag = threading.Event()
+    # flag = threading.Event()
 
     def __init__(self):
         self._GPIOPORT = config.PIN_NUMBER_LED
         GPIO.setwarnings(False)
         GPIO.setup(self._GPIOPORT, GPIO.OUT)
-        self.flag.set()
+        # self.flag.set()
 
     def turn_on(self):
-        self.flag.clear()
+        # self.flag.clear()
         print 'Turn On ...'
         GPIO.output(self._GPIOPORT, True)
 
     def turn_off(self):
-        self.flag.clear()
+        # self.flag.clear()
         print 'Turn Off ...'
         GPIO.output(self._GPIOPORT, False)
 
