@@ -3,11 +3,7 @@ from sqlalchemy import *
 from bdd_base import *
 import config
 import unirest
-from beans.track import Track
-from beans.session import Session
-from beans.gps_datas import GPSData
 from datetime import date, datetime
-import json
 from utils.AlchemyEncoder import *
 import utils.log as log
 

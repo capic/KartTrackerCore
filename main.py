@@ -2,9 +2,7 @@ __author__ = 'Vincent'
 
 import getopt
 from gps import *
-from beans.gps_datas import GPSData
 from utils.bdd import *
-import utils.log as log
 from utils.functions import *
 import os
 import threading
