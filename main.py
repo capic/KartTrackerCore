@@ -99,13 +99,14 @@ def main(argv):
 
             print("Push button to start")
             GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
-            start_blinking.set()
 
             # create new session and insert it
             track_session = start_track_session(track.id)
 
             GPIO.add_event_detect(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
 
+            log.log("Start blinking ...", log.LEVEL_DEBUG)
+            start_blinking.set()
             while not stop_recording:
                 # get the gps datas
                 if session.waiting():
@@ -125,6 +126,7 @@ def main(argv):
                     stop_recording = True
 
             GPIO.remove_event_detect(config.PIN_NUMBER_BUTTON)
+            log.log("Stop blinking ...", log.LEVEL_DEBUG)
             start_blinking.clear()
 
             program_waiting()
