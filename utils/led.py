@@ -4,11 +4,11 @@ import RPi.GPIO as GPIO
 import threading
 import time
 
-flagstop = 0
-flag = threading.Event()
-
 
 class Led:
+    flagstop = 0
+    flag = threading.Event()
+
     def __init__(self):
         self._GPIOPORT = config.PIN_NUMBER_LED
         GPIO.setwarnings(False)
