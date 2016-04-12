@@ -85,7 +85,6 @@ def main(argv):
         while not stop_program:
             stop_recording = False
 
-
             print("Push button to start")
             # GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
             e.clear()
