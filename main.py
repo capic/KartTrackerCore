@@ -90,6 +90,7 @@ def main(argv):
             print("Push button to start")
             GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
             led.blink(0.5, e)
+
             # create new session and insert it
             track_session = start_track_session(track.id)
 
@@ -127,7 +128,7 @@ def main(argv):
         log.log("Cleanup program", log.LEVEL_INFO)
         session = None
         GPIO.cleanup()
-        led.led_off()
+        led.turn_off()
 
 
 if __name__ == "__main__":
