@@ -18,7 +18,6 @@ class Led:
         GPIO.output(self._GPIOPORT, True)
 
     def turn_off(self):
-        # self.flag.clear()
         GPIO.output(self._GPIOPORT, False)
 
     def blink(self, delay, e):
