@@ -39,7 +39,7 @@ def send_to_central_database():
     log.log("Number of session to send: %d" % len(ret), log.LEVEL_DEBUG)
     if len(ret) > 0:
         json_sessions = json.dumps(ret, cls=new_alchemy_encoder(False, ['gps_datas']), check_circular=False)
-        unirest.setTimeaout(30)
+        unirest.timeout(30)
         param = {"datas": json_sessions}
         response = unirest.post(config.REST_ADDRESS + 'sessions', headers={"Accept": "application/json"}, params=param)
 
