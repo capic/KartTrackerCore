@@ -27,6 +27,10 @@ class Track(Base):
     def __repr__(self):
         return '{id: ' + str(self.id) + ', name: ' + str(self.name) + '}'
 
+    def from_json(self, json):
+        self.id = json['id']
+        self.name = json['name']
+
 
 # ############ SESSION ############
 
