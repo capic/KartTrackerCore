@@ -34,7 +34,7 @@ def update_from_central_database():
 
 def send_to_central_database():
     log.log("send_to_central_database", log.LEVEL_INFO)
-    ret = db_session.query(Session, GPSData).join(GPSData).all()
+    ret = db_session.query(Session).all()
 
     print(ret)
     # exit(-1)
