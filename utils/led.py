@@ -40,3 +40,4 @@ class Led:
             print('on')
             GPIO.output(self._GPIOPORT, True)
             time.sleep(delaytime)
+        print 'blink_thread stop...'
