@@ -90,7 +90,7 @@ def main(argv):
     stop_blinking = threading.Event()
     t = threading.Thread(name='non-block', target=program_running, args=(stop_blinking, ))
     t.start()
-    stop_blinking.set()
+    # stop_blinking.set()
 
     stop_program = False
     try:
