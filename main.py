@@ -127,7 +127,8 @@ def main(argv):
                     stop_recording = True
 
             GPIO.remove_event_detect(config.PIN_NUMBER_BUTTON)
-            stop_blinking.set()
+            # stop_blinking.set()
+            start_blinking.clear()
 
             program_waiting()
 
