@@ -32,7 +32,7 @@ class Led:
 
     def blink_thread(self, delaytime, event):
         print 'blink_thread Start ....'
-        event.wait()
+
         while not event:
             print('off')
             GPIO.output(self._GPIOPORT, False)
@@ -40,4 +40,6 @@ class Led:
             print('on')
             GPIO.output(self._GPIOPORT, True)
             time.sleep(delaytime)
+
+        event.wait()
         print 'blink_thread stop...'
