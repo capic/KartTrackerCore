@@ -19,6 +19,8 @@ def flash_led(stop_blinking):
         GPIO.output(config.PIN_NUMBER_LED, True)
         time.sleep(0.5)
 
+    stop_blinking.wait()
+
 
 def led_on():
     GPIO.output(config.PIN_NUMBER_LED, True)
