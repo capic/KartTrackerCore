@@ -75,7 +75,6 @@ def main(argv):
 
     led = Led()
     led.turn_on()
-    led.turn_off()
 
     e = threading.Event()
 
