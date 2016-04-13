@@ -71,9 +71,7 @@ def send_to_central_database():
         else:
             log.log("Session ids inserted: %s" % response.body, log.LEVEL_DEBUG)
             log.log("Delete sessions inserted", log.LEVEL_INFO)
-            for session_json in ret:
-                session = Session()
-                session._from_json(session_json)
+            for session in ret:
                 db_session.delete(session)
                 break
 
