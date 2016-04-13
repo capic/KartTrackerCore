@@ -52,6 +52,7 @@ def send_to_central_database():
                 log.log("Update track id: %d" % track.id, log.LEVEL_DEBUG)
                 track.new = False
                 db_session.update(track)
+                db_session.commit()
 
     log.log("Sessions treatment...", log.LEVEL_INFO)
     ret = db_session.query(Session).all()
@@ -70,6 +71,7 @@ def send_to_central_database():
                 log.log("Delete session id: %d" % session.id, log.LEVEL_DEBUG)
                 print(session)
                 db_session.delete(session)
+                db_session.commit()
 
 
 def start_track_session(track_id):
