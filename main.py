@@ -111,7 +111,7 @@ def main(argv):
                 if GPIO.event_detected(config.PIN_NUMBER_BUTTON):
                     log.log("Event detected stop recording !!!", log.LEVEL_DEBUG)
                     stop_recording = True
-                    time.sleep(1000)
+                    time.sleep(1)
 
             GPIO.remove_event_detect(config.PIN_NUMBER_BUTTON)
             log.log("Stop blinking ...", log.LEVEL_DEBUG)
