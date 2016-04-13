@@ -73,7 +73,7 @@ def send_to_central_database():
             log.log("Delete sessions inserted", log.LEVEL_INFO)
             for session_json in ret:
                 session = Session()
-                session.from_json(session_json)
+                session._from_json(session_json)
                 db_session.delete(session)
                 break
 
