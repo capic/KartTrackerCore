@@ -73,7 +73,6 @@ def send_to_central_database():
             log.log("Delete sessions inserted", log.LEVEL_INFO)
             for session in ret:
                 db_session.delete(session)
-                break
 
 
 def start_track_session(track_id):
