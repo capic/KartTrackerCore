@@ -45,17 +45,13 @@ def send_to_central_database():
         response = unirest.post(config.REST_ADDRESS + 'tracks/list', headers={"Accept": "application/json"}, params=param)
 
         if response.code != 200:
-            log.log("Erreur d'insertion: %s" % response.body, log.LEVEL_ERROR)
+            log.log("Insertion error: %s" % response.body, log.LEVEL_ERROR)
         else:
-            log.log("Tracks ids inserted: %s" % response.body, log.LEVEL_DEBUG)
             log.log("Update 'new' flags to false for tracks inserted", log.LEVEL_INFO)
             for track in ret:
-                for id_json in response.body:
-                    if track.id == id_json.id:
-                        log.log("Track found => delete %s" % track, log.LEVEL_DEBUG)
-                        track.new = False
-                        db_session.update(track)
-                        break
+                log.log("Update track id: %d" % track.id, log.LEVEL_DEBUG)
+                track.new = False
+                db_session.update(track)
 
     log.log("Sessions treatment...", log.LEVEL_INFO)
     ret = db_session.query(Session).all()
@@ -67,11 +63,11 @@ def send_to_central_database():
         response = unirest.post(config.REST_ADDRESS + 'sessions/list', headers={"Accept": "application/json"}, params=param)
 
         if response.code != 200:
-            log.log("Erreur d'insertion: %s" % response.body, log.LEVEL_ERROR)
+            log.log("Insertion error: %s" % response.body, log.LEVEL_ERROR)
         else:
-            log.log("Session ids inserted: %s" % response.body, log.LEVEL_DEBUG)
             log.log("Delete sessions inserted", log.LEVEL_INFO)
             for session in ret:
+                log.log("Delete session id: %d" % session.id, log.LEVEL_DEBUG)
                 db_session.delete(session)
 
 
