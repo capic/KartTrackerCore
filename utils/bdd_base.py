@@ -55,6 +55,19 @@ class Session(Base):
             self.start_time) + ', end_time: ' + str(self.end_time) + ', track_id: ' + str(
             self.track_id) + '}'
 
+    def from_json(self, json):
+        self.id = json['id']
+        self.id_day_session = json['id_day_session']
+        self.date_session = json['date_session']
+        self.name = json['name']
+        self.start_time = json['start_time']
+        self.end_time = json['end_time']
+
+        for gps_data_json in json['gps_datas']:
+            gps_data = GPSData()
+            gps_data.from_json(gps_data_json)
+            self.gps_datas.append(gps_data)
+
 # ############### GPS DATA ##############
 
 
@@ -72,6 +85,13 @@ class GPSData(Base):
         return '{id: ' + str(self.id) + ', latitude: ' + str(self.latitude) + ', longitude: ' + str(
             self.longitude) + ', speed: ' + str(self.speed) + ', date_time: ' + str(
             self.date_time) + ', session_id: ' + str(self.session_id) + '}'
+
+    def from_json(self, json):
+        self.id = json['id']
+        self.latitude = json['latitude']
+        self.longitude = json['longitude']
+        self.speed = json['speed']
+        self.date_time = json['date_time']
 
 # Base.query = db_session.query_property()
 Base.metadata.create_all(engine)

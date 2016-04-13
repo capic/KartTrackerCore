@@ -71,12 +71,11 @@ def send_to_central_database():
         else:
             log.log("Session ids inserted: %s" % response.body, log.LEVEL_DEBUG)
             log.log("Delete sessions inserted", log.LEVEL_INFO)
-            for session in ret:
-                for id_json in response.body:
-                    if session.id == id_json.id:
-                        log.log("Session found => delete %s" % session, log.LEVEL_DEBUG)
-                        db_session.delete(session)
-                        break
+            for session_json in ret:
+                session = Session()
+                session.from_json(session_json)
+                db_session.delete(session)
+                break
 
 
 def start_track_session(track_id):
