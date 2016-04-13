@@ -39,7 +39,8 @@ class Track(Base):
 
 class Session(Base):
     __tablename__ = 'session'
-    id = Column(Integer, primary_key=True, sqlite_autoincrement=True)
+    __table_args__ = {'sqlite_autoincrement': True}
+    id = Column(Integer, primary_key=True)
     id_day_session = Column(Integer)
     date_session = Column(Date)
     name = Column(String)
@@ -73,7 +74,8 @@ class Session(Base):
 
 class GPSData(Base):
     __tablename__ = 'gps_data'
-    id = Column(Integer, primary_key=True, sqlite_autoincrement=True)
+    __table_args__ = {'sqlite_autoincrement': True}
+    id = Column(Integer, primary_key=True)
     latitude = Column(Float)
     longitude = Column(Float)
     speed = Column(Float)
