@@ -45,6 +45,8 @@ def send_to_central_database():
 
         if response.code != 200:
             log.log("Erreur d'insertion: %s" % response.body, log.LEVEL_ERROR)
+        else:
+            log.log("Session ids inserted: %s" % response.body, log.LEVEL_DEBUG)
 
 
 def start_track_session(track_id):
