@@ -2,7 +2,7 @@ __author__ = 'Vincent'
 from sqlalchemy import *
 from sqlalchemy.orm import (scoped_session, sessionmaker, relationship, backref)
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Date, Time
+from sqlalchemy import Column, Integer, String, Date, Time, Boolean
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 import config
@@ -23,6 +23,7 @@ class Track(Base):
     __tablename__ = 'track'
     id = Column(Integer, primary_key=True)
     name = Column(String)
+    new = Column(Boolean)
     session = relationship("Session")
 
     def __repr__(self):
@@ -45,7 +46,7 @@ class Session(Base):
     start_time = Column(Time)
     end_time = Column(Time)
 
-    gps_datas = relationship("GPSData")
+    gps_datas = relationship("GPSData", cascade="delete")
     track_id = Column(Integer, ForeignKey('track.id'))
 
     def __repr__(self):

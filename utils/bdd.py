@@ -34,19 +34,49 @@ def update_from_central_database():
 
 def send_to_central_database():
     log.log("send_to_central_database", log.LEVEL_INFO)
-    ret = db_session.query(Session).all()
 
+    log.log("Tracks treatment...", log.LEVEL_INFO)
+    ret = db_session.query(Track).filter(Track.new == True)
+    log.log("Numer of tracks to send: %d" % len(ret), log.LEVEL_DEBUG)
+    if len(ret) > 0:
+        json_tracks = json_dumps(ret, cls=new_alchemy_encoder(False, []), check_circular=False)
+        unirest.timeout(99999)
+        param = {"datas": json_tracks}
+        response = unirest.post(config.REST_ADDRESS + 'tracks/list', headers={"Accept": "application/json"}, params=param)
+
+        if response.code != 200:
+            log.log("Erreur d'insertion: %s" % response.body, log.LEVEL_ERROR)
+        else:
+            log.log("Tracks ids inserted: %s" % response.body, log.LEVEL_DEBUG)
+            log.log("Update 'new' flags to false for tracks inserted", log.LEVEL_INFO)
+            for track in ret:
+                for id_json in response.body:
+                    if track.id == id_json.id:
+                        log.log("Track found => delete %s" % track, log.LEVEL_DEBUG)
+                        track.new = False
+                        db_session.update(track)
+                        break
+
+    log.log("Sessions treatment...", log.LEVEL_INFO)
+    ret = db_session.query(Session).all()
     log.log("Number of session to send: %d" % len(ret), log.LEVEL_DEBUG)
     if len(ret) > 0:
         json_sessions = json.dumps(ret, cls=new_alchemy_encoder(False, ['gps_datas']), check_circular=False)
         unirest.timeout(99999)
         param = {"datas": json_sessions}
-        response = unirest.post(config.REST_ADDRESS + 'sessions', headers={"Accept": "application/json"}, params=param)
+        response = unirest.post(config.REST_ADDRESS + 'sessions/list', headers={"Accept": "application/json"}, params=param)
 
         if response.code != 200:
             log.log("Erreur d'insertion: %s" % response.body, log.LEVEL_ERROR)
         else:
             log.log("Session ids inserted: %s" % response.body, log.LEVEL_DEBUG)
+            log.log("Delete sessions inserted", log.LEVEL_INFO)
+            for session in ret:
+                for id_json in response.body:
+                    if session.id == id_json.id:
+                        log.log("Session found => delete %s" % session, log.LEVEL_DEBUG)
+                        db_session.delete(session)
+                        break
 
 
 def start_track_session(track_id):
