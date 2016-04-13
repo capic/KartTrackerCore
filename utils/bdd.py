@@ -36,7 +36,7 @@ def send_to_central_database():
     log.log("send_to_central_database", log.LEVEL_INFO)
 
     log.log("Tracks treatment...", log.LEVEL_INFO)
-    ret = db_session.query(Track).filter(Track.new == True)
+    ret = db_session.query(Track).filter(Track.new == True).all()
     log.log("Numer of tracks to send: %d" % len(ret), log.LEVEL_DEBUG)
     if len(ret) > 0:
         json_tracks = json_dumps(ret, cls=new_alchemy_encoder(False, []), check_circular=False)
