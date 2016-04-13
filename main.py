@@ -40,6 +40,10 @@ def init_config():
         if 'log_level' in config_object:
             config.CONFIG_LOG_LEVEL = config_object['log_level']
             log.convert_log_level_to_logging_level()
+        if 'pin_number_button' in config_object:
+            config.PIN_NUMBER_BUTTON = config_object['pin_number_button']
+        if 'pin_number_led' in config_object:
+            config.PIN_NUMBER_BUTTON = config_object['pin_number_led']
 
         log.log("Rest Address: %s" % config.REST_ADRESSE, log.LEVEL_DEBUG)
         log.log("Log output %s" % str(config.LOG_OUTPUT), log.LEVEL_DEBUG)
@@ -60,7 +64,6 @@ def main(argv):
     log.log("Starting ....", log.LEVEL_INFO)
     # TODO: on ne doit envoyer seulement quand on veut importer en base centrale (avec un switch ? ou quand on recupere la connexion ?)
     send_to_central_database()
-
     update_from_central_database()
 
     if len(args) != 1:
@@ -106,6 +109,8 @@ def main(argv):
                     log.log("Insert: " + str(gps_data), log.LEVEL_DEBUG)
                     db_session.add(gps_data)
                     db_session.commit()
+                else:
+                    log.log("No gps datas", log.LEVEL_DEBUG)
 
                 if GPIO.event_detected(config.PIN_NUMBER_BUTTON):
                     log.log("Event detected stop recording !!!", log.LEVEL_DEBUG)
