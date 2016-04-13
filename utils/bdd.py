@@ -68,6 +68,7 @@ def send_to_central_database():
             log.log("Delete sessions inserted", log.LEVEL_INFO)
             for session in ret:
                 log.log("Delete session id: %d" % session.id, log.LEVEL_DEBUG)
+                print(session)
                 db_session.delete(session)
 
 
