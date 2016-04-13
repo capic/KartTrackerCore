@@ -8,8 +8,8 @@ from sqlalchemy.orm import relationship
 import config
 
 
-# engine = create_engine(config.BDD_STRING_CONNECTION, convert_unicode=True, echo=True)
-engine = create_engine(config.BDD_STRING_CONNECTION, convert_unicode=True)
+engine = create_engine(config.BDD_STRING_CONNECTION, convert_unicode=True, echo=True)
+# engine = create_engine(config.BDD_STRING_CONNECTION, convert_unicode=True)
 db_session = scoped_session(sessionmaker(autocommit=False,
                                          autoflush=False,
                                          bind=engine))
