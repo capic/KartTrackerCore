@@ -12,7 +12,7 @@ from utils.led import Led
 def init_gpio():
     log.log("init_gpio", log.LEVEL_INFO)
 
-    GPIO.setmode(GPIO.BOARD)
+    GPIO.setmode(GPIO.BCM)
     GPIO.setup(config.PIN_NUMBER_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 
