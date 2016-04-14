@@ -7,7 +7,7 @@ import time
 
 class Led:
     # flag = threading.Event()
-    GPIO.setmode(GPIO.BCM)
+    # GPIO.setmode(GPIO.BCM)
 
     def __init__(self):
         self._GPIOPORT = config.PIN_NUMBER_LED
