@@ -90,7 +90,10 @@ def main(argv):
         log.log("No track id chosen", log.LEVEL_ERROR)
         exit()
 
-    init_gpio()
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(config.PIN_NUMBER_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    GPIO.setup(config.PIN_NUMBER_LED, GPIO.OUT)
+    # GPIO.setwarnings(False)
 
     engine.connect()
     session = gps(mode=WATCH_ENABLE)
