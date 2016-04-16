@@ -54,17 +54,35 @@ def init_config():
 
 def main(argv):
     try:
-        opts, args = getopt.getopt(argv, "", [])
+        opts, args = getopt.getopt(argv, "uds", ["upload", "download", "synchronize"])
     except getopt.GetoptError:
         exit()
 
     init_config()
+
+    for o, a in opts:
+        if o in ("-u", "--upload"):
+            log.log("Upload mode", log.LEVEL_DEBUG)
+            to_upload = True
+        elif o in ("-d", "--download"):
+            log.log("Download mode", log.LEVEL_DEBUG)
+            to_download = True
+        elif o in ("-s", "--synchronize"):
+            log.log("synchronize mode", log.LEVEL_DEBUG)
+            to_upload = True
+            to_download = True
+        else:
+            assert False, "unhandled option"
+
+    if to_upload:
+        send_to_central_database()
+
+    if to_download:
+        update_from_central_database()
+
     init_gpio()
 
     log.log("Starting ....", log.LEVEL_INFO)
-    # TODO: on ne doit envoyer seulement quand on veut importer en base centrale (avec un switch ? ou quand on recupere la connexion ?)
-    send_to_central_database()
-    update_from_central_database()
 
     if len(args) != 1:
         log.log("No track id chosen", log.LEVEL_ERROR)
