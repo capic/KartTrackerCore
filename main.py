@@ -96,14 +96,14 @@ def main(argv):
     led = Led(config.PIN_NUMBER_LED)
     led.turn_on()
 
-    init_gpio()
-
     e = threading.Event()
 
     stop_program = False
     try:
         track_id = args[0]
         track = db_session.query(Track).filter(Track.id == track_id).one()
+
+        init_gpio()
 
         # il faut pouvoir arreter le programme depuis l'interface
         while not stop_program:
