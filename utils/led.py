@@ -7,8 +7,6 @@ import time
 class Led:
     def __init__(self, pin):
         self._GPIOPORT = pin
-        GPIO.setwarnings(False)
-        GPIO.setup(self._GPIOPORT, GPIO.OUT)
 
     def turn_on(self):
         GPIO.output(self._GPIOPORT, True)
