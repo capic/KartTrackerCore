@@ -45,7 +45,7 @@ def init_config():
         if 'pin_number_led' in config_object:
             config.PIN_NUMBER_BUTTON = config_object['pin_number_led']
 
-        log.log("Rest Address: %s" % config.REST_ADRESSE, log.LEVEL_DEBUG)
+        log.log("Rest Address: %s" % config.REST_ADDRESS, log.LEVEL_DEBUG)
         log.log("Log output %s" % str(config.LOG_OUTPUT), log.LEVEL_DEBUG)
         log.log("Console output %s" % str(config.CONSOLE_OUTPUT), log.LEVEL_DEBUG)
     else:
@@ -90,9 +90,6 @@ def main(argv):
         log.log("No track id chosen", log.LEVEL_ERROR)
         exit()
 
-    track_id = args[0]
-    track = db_session.query(Track).filter(Track.id == track_id).one()
-
     engine.connect()
     session = gps(mode=WATCH_ENABLE)
 
@@ -103,6 +100,9 @@ def main(argv):
 
     stop_program = False
     try:
+        track_id = args[0]
+        track = db_session.query(Track).filter(Track.id == track_id).one()
+
         # il faut pouvoir arreter le programme depuis l'interface
         while not stop_program:
             stop_recording = False
