@@ -108,6 +108,8 @@ def main(argv):
             stop_recording = False
 
             print("Push button to start")
+            GPIO.setmode(GPIO.BCM)
+            GPIO.setup(config.PIN_NUMBER_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_UP)
             GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
             e.set()
             e.clear()
