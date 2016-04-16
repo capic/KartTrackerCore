@@ -59,6 +59,8 @@ def main(argv):
         exit()
 
     init_config()
+    to_upload = False
+    to_download = False
 
     for o, a in opts:
         if o in ("-u", "--upload"):
