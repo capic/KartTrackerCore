@@ -20,7 +20,13 @@ class Led:
     def turn_off(self):
         GPIO.output(self._GPIOPORT, False)
 
-    def blink(self, delay, e):
+    def blink_error(self, e):
+        delay = 0.1
+        t1 = threading.Thread(target=self.blink_thread, args=(delay, e))
+        t1.start()
+
+    def blink(self, e):
+        delay = 0.5
         t1 = threading.Thread(target=self.blink_thread, args=(delay, e))
         t1.start()
 

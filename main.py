@@ -109,40 +109,45 @@ def main(argv):
 
             print("Push button to start")
             GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
-            e.clear()
-            led.blink(0.5, e)
-
-            # create new session and insert it
-            track_session = start_track_session(track.id)
-
-            GPIO.add_event_detect(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
-
-            while not stop_recording:
-                # get the gps datas
-                if session.waiting():
-                    datas = session.next()
-
-                if datas['class'] == "TPV":
-                    # create gps datas and insert it
-                    gps_data = GPSData(latitude=session.fix.latitude, longitude=session.fix.longitude,
-                                       speed=session.fix.speed, date_time=session.fix.time, session_id=track_session.id)
-                    log.log("Insert: " + str(gps_data), log.LEVEL_DEBUG)
-                    db_session.add(gps_data)
-                    db_session.commit()
-                else:
-                    log.log("No gps datas", log.LEVEL_DEBUG)
-
-                if GPIO.event_detected(config.PIN_NUMBER_BUTTON):
-                    log.log("Event detected stop recording !!!", log.LEVEL_DEBUG)
-                    stop_recording = True
-                    time.sleep(1)
-
-            GPIO.remove_event_detect(config.PIN_NUMBER_BUTTON)
-            log.log("Stop blinking ...", log.LEVEL_DEBUG)
             e.set()
-            led.turn_on()
+            e.clear()
+            led.blink(e)
 
-            end_track_session(track_session)
+            try:
+                # create new session and insert it
+                track_session = start_track_session(track.id)
+
+                GPIO.add_event_detect(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
+
+                while not stop_recording:
+                    # get the gps datas
+                    if session.waiting():
+                        datas = session.next()
+
+                    if datas['class'] == "TPV":
+                        # create gps datas and insert it
+                        gps_data = GPSData(latitude=session.fix.latitude, longitude=session.fix.longitude,
+                                           speed=session.fix.speed, date_time=session.fix.time, session_id=track_session.id)
+                        log.log("Insert: " + str(gps_data), log.LEVEL_DEBUG)
+                        db_session.add(gps_data)
+                        db_session.commit()
+                    else:
+                        log.log("No gps datas", log.LEVEL_DEBUG)
+
+                    if GPIO.event_detected(config.PIN_NUMBER_BUTTON):
+                        log.log("Event detected stop recording !!!", log.LEVEL_DEBUG)
+                        stop_recording = True
+
+                GPIO.remove_event_detect(config.PIN_NUMBER_BUTTON)
+                log.log("Stop blinking ...", log.LEVEL_DEBUG)
+                e.set()
+                led.turn_on()
+                time.sleep(1)
+
+                end_track_session(track_session)
+            except Exception:
+                led.blink_error(e)
+                raise
     except KeyError:
         log.log("Stop by the user", log.LEVEL_ERROR)
     except StopIteration:
