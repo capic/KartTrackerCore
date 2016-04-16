@@ -90,12 +90,11 @@ def main(argv):
         log.log("No track id chosen", log.LEVEL_ERROR)
         exit()
 
-    init_gpio()
-
     engine.connect()
     session = gps(mode=WATCH_ENABLE)
 
     led = Led(config.PIN_NUMBER_LED)
+    init_gpio()
     led.turn_on()
 
     e = threading.Event()
