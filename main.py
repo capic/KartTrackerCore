@@ -94,8 +94,9 @@ def main(argv):
     session = gps(mode=WATCH_ENABLE)
 
     led = Led(config.PIN_NUMBER_LED)
-    init_gpio()
     led.turn_on()
+
+    init_gpio()
 
     e = threading.Event()
 
