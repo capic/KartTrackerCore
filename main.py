@@ -84,13 +84,13 @@ def main(argv):
     if to_download:
         update_from_central_database()
 
-    init_gpio()
-
     log.log("Starting ....", log.LEVEL_INFO)
 
     if len(args) != 1:
         log.log("No track id chosen", log.LEVEL_ERROR)
         exit()
+
+    init_gpio()
 
     engine.connect()
     session = gps(mode=WATCH_ENABLE)
