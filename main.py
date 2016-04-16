@@ -13,11 +13,9 @@ def init_gpio():
     log.log("init_gpio", log.LEVEL_INFO)
 
     GPIO.setmode(GPIO.BCM)
-    log.log("Pin Number Button %d" % config.PIN_NUMBER_BUTTON, log.LEVEL_DEBUG)
-    GPIO.setup(config.PIN_NUMBER_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    log.log("Pin Number led %d" % config.PIN_NUMBER_LED, log.LEVEL_DEBUG)
-    GPIO.setup(config.PIN_NUMBER_LED, GPIO.OUT)
     GPIO.setwarnings(False)
+    GPIO.setup(config.PIN_NUMBER_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    GPIO.setup(config.PIN_NUMBER_LED, GPIO.OUT)
 
 
 def init_config():
@@ -52,13 +50,16 @@ def init_config():
         log.log("Rest Address: %s" % config.REST_ADDRESS, log.LEVEL_DEBUG)
         log.log("Log output %s" % str(config.LOG_OUTPUT), log.LEVEL_DEBUG)
         log.log("Console output %s" % str(config.CONSOLE_OUTPUT), log.LEVEL_DEBUG)
+        log.log("Log bdd %s" % str(config.LOG_BDD), log.LEVEL_DEBUG)
+        log.log("Pin number button %d" % config.PIN_NUMBER_BUTTON, log.LEVEL_DEBUG)
+        log.log("Pin number led %d" % config.PIN_NUMBER_LED, log.LEVEL_DEBUG)
     else:
         print("config file not found")
 
 
 def main(argv):
     try:
-        opts, args = getopt.getopt(argv, "uds", ["upload", "download", "synchronize"])
+        opts, args = getopt.getopt(argv, "udsp:", ["upload", "download", "synchronize", "database-path"])
     except getopt.GetoptError:
         exit()
 
@@ -77,6 +78,10 @@ def main(argv):
             log.log("synchronize mode", log.LEVEL_DEBUG)
             to_upload = True
             to_download = True
+        elif o in ("-p", "--database-path"):
+            log.log("database path %s" % a, log.LEVEL_DEBUG)
+            config.BDD_STRING_CONNECTION = config.BDD_TYPE + ':///' + a + config.BDD_NAME
+            log.log("Connection string %s" % config.BDD_STRING_CONNECTION, log.LEVEL_DEBUG)
         else:
             assert False, "unhandled option"
 
