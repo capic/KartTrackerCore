@@ -1,16 +1,12 @@
 __author__ = 'Vincent'
-import utils.config as config
 import RPi.GPIO as GPIO
 import threading
 import time
 
 
 class Led:
-    # flag = threading.Event()
-    # GPIO.setmode(GPIO.BCM)
-
-    def __init__(self):
-        self._GPIOPORT = config.PIN_NUMBER_LED
+    def __init__(self, pin):
+        self._GPIOPORT = pin
         GPIO.setwarnings(False)
         GPIO.setup(self._GPIOPORT, GPIO.OUT)
 

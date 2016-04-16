@@ -93,7 +93,7 @@ def main(argv):
     engine.connect()
     session = gps(mode=WATCH_ENABLE)
 
-    led = Led()
+    led = Led(config.PIN_NUMBER_LED)
     led.turn_on()
 
     e = threading.Event()
@@ -108,8 +108,6 @@ def main(argv):
             stop_recording = False
 
             print("Push button to start")
-            GPIO.setmode(GPIO.BCM)
-            GPIO.setup(config.PIN_NUMBER_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_UP)
             GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
             e.set()
             e.clear()
