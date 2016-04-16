@@ -90,6 +90,8 @@ def main(argv):
         log.log("No track id chosen", log.LEVEL_ERROR)
         exit()
 
+    init_gpio()
+
     engine.connect()
     session = gps(mode=WATCH_ENABLE)
 
@@ -102,8 +104,6 @@ def main(argv):
     try:
         track_id = args[0]
         track = db_session.query(Track).filter(Track.id == track_id).one()
-
-        init_gpio()
 
         # il faut pouvoir arreter le programme depuis l'interface
         while not stop_program:
