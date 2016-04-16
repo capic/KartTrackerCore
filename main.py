@@ -47,7 +47,7 @@ def init_config():
         if 'pin_number_button' in config_object:
             config.PIN_NUMBER_BUTTON = config_object['pin_number_button']
         if 'pin_number_led' in config_object:
-            config.PIN_NUMBER_BUTTON = config_object['pin_number_led']
+            config.PIN_NUMBER_LED = config_object['pin_number_led']
 
         log.log("Rest Address: %s" % config.REST_ADDRESS, log.LEVEL_DEBUG)
         log.log("Log output %s" % str(config.LOG_OUTPUT), log.LEVEL_DEBUG)
