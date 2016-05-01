@@ -123,7 +123,7 @@ def main(argv):
             print("Push button to start")
             GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
             sleep(3)
-            if GPIO.input(config.PIN_NUMBER_BUTTON) == 0:
+            if GPIO.input(config.PIN_NUMBER_BUTTON) == GPIO.LOW:
                 stop_program = True
 
             e.set()
