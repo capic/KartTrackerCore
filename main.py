@@ -125,6 +125,7 @@ def main(argv):
             sleep(3)
             if GPIO.input(config.PIN_NUMBER_BUTTON) == GPIO.LOW:
                 log.log("Button still pressed", log.LEVEL_DEBUG)
+                stop_recording = True
                 stop_program = True
 
             e.set()
