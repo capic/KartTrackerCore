@@ -124,6 +124,7 @@ def main(argv):
             GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
             sleep(3)
             if GPIO.input(config.PIN_NUMBER_BUTTON) == GPIO.LOW:
+                log.log("Button still pressed", log.LEVEL_DEBUG)
                 stop_program = True
 
             e.set()
