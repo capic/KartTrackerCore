@@ -26,6 +26,8 @@ def init_config():
         config_object = {}
         execfile(config.CONFIG_FILE, config_object)
 
+        if 'bdd_path' in config_object:
+            config.BDD_PATH = config_object['bdd_path']
         if 'rest_adresse' in config_object:
             config.REST_ADRESSE = config_object['rest_adresse']
         if 'log_output' in config_object:
@@ -47,6 +49,7 @@ def init_config():
         if 'pin_number_led' in config_object:
             config.PIN_NUMBER_LED = config_object['pin_number_led']
 
+        log.log("Bdd path: %s" % config.BDD_PATH, log.LEVEL_DEBUG)
         log.log("Rest Address: %s" % config.REST_ADDRESS, log.LEVEL_DEBUG)
         log.log("Log output %s" % str(config.LOG_OUTPUT), log.LEVEL_DEBUG)
         log.log("Console output %s" % str(config.CONSOLE_OUTPUT), log.LEVEL_DEBUG)

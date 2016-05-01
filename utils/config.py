@@ -1,8 +1,9 @@
 __author__ = 'Vincent'
 
 BDD_TYPE = 'sqlite'
+BDD_PATH = '/home/pi/KartTracker/'
 BDD_NAME = 'karttracker.db'
-BDD_STRING_CONNECTION = BDD_TYPE + ':///' + BDD_NAME
+BDD_STRING_CONNECTION = BDD_TYPE + ':///' + BDD_PATH + BDD_NAME
 
 PIN_NUMBER_BUTTON = 13
 PIN_NUMBER_LED = 26
