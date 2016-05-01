@@ -7,6 +7,7 @@ from utils.functions import *
 import os
 import threading
 from utils.led import Led
+from time import sleep
 
 
 def init_gpio():
@@ -121,6 +122,10 @@ def main(argv):
 
             print("Push button to start")
             GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
+            sleep(3)
+            if GPIO.input(config.PIN_NUMBER_BUTTON) == 0:
+                stop_program = True
+
             e.set()
             e.clear()
             led.blink(e)
