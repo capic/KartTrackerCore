@@ -19,7 +19,7 @@ class GpsThread(Thread):
         while not self.stop_program.isSet():
             self.can_run.wait()
             
-            while self.can_run.isSet():
+            while not self.stop_program.isSet() and self.can_run.isSet():
                 # get the gps datas
                 if self.session.waiting():
                     datas = self.session.next()
