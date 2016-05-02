@@ -44,5 +44,5 @@ class GpsThread(Thread):
         
     def stop(self):
         log.log("GpsThread stopping ....", log.LEVEL_DEBUG)
-        self.pause()
+        # self.pause()
         self.stop_program.set()
