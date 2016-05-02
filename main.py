@@ -8,6 +8,9 @@ import os
 import threading
 from utils.led import Led
 from time import sleep
+from threads.gps_thread import GpsThread
+
+gps_thread = GpsThread(db_session)
 
 
 def init_gpio():
@@ -61,6 +64,11 @@ def init_config():
         print("config file not found")
 
 
+def stop_threads():
+    log.log("Event detected stop recording !!!", log.LEVEL_DEBUG)
+    gps_thread.set_stop_recording(True)
+
+
 def main(argv):
     try:
         opts, args = getopt.getopt(argv, "udsp:", ["upload", "download", "synchronize", "database-path"])
@@ -104,7 +112,6 @@ def main(argv):
     init_gpio()
 
     engine.connect()
-    session = gps(mode=WATCH_ENABLE)
 
     led = Led(config.PIN_NUMBER_LED)
     led.turn_on()
@@ -118,8 +125,6 @@ def main(argv):
 
         # il faut pouvoir arreter le programme depuis l'interface
         while not stop_program:
-            stop_recording = False
-
             print("Push button to start")
             GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
             sleep(0.5)
@@ -127,7 +132,6 @@ def main(argv):
                 sleep(2)
                 if GPIO.input(config.PIN_NUMBER_BUTTON) == GPIO.LOW:
                     log.log("Button still pressed", log.LEVEL_DEBUG)
-                    stop_recording = True
                     stop_program = True
 
             e.set()
@@ -138,26 +142,9 @@ def main(argv):
                 # create new session and insert it
                 track_session = start_track_session(track.id)
 
-                GPIO.add_event_detect(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
-
-                while not stop_recording:
-                    # get the gps datas
-                    if session.waiting():
-                        datas = session.next()
-
-                    if datas['class'] == "TPV":
-                        # create gps datas and insert it
-                        gps_data = GPSData(latitude=session.fix.latitude, longitude=session.fix.longitude,
-                                           speed=session.fix.speed, date_time=session.fix.time, session_id=track_session.id)
-                        log.log("Insert: " + str(gps_data), log.LEVEL_DEBUG)
-                        db_session.add(gps_data)
-                        db_session.commit()
-                    else:
-                        log.log("No gps datas", log.LEVEL_DEBUG)
-
-                    if GPIO.event_detected(config.PIN_NUMBER_BUTTON):
-                        log.log("Event detected stop recording !!!", log.LEVEL_DEBUG)
-                        stop_recording = True
+                gps_thread.start()
+                GPIO.add_event_detect(config.PIN_NUMBER_BUTTON, GPIO.FALLING, stop_threads)
+                gps_thread.join()
 
                 GPIO.remove_event_detect(config.PIN_NUMBER_BUTTON)
                 log.log("Stop blinking ...", log.LEVEL_DEBUG)
