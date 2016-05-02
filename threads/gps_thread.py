@@ -33,6 +33,7 @@ class GpsThread(Thread):
                     self.db_session.commit()
                 else:
                     log.log("No gps datas", log.LEVEL_DEBUG)
+        log.log("GpsThread will be stopped !!")
 
     def pause(self):
         log.log("GpsThread pausing ....", log.LEVEL_DEBUG)
