@@ -35,11 +35,14 @@ class GpsThread(Thread):
                     log.log("No gps datas", log.LEVEL_DEBUG)
 
     def pause(self):
+        log.log("GpsThread resuming ....", log.LEVEL_DEBUG)
         self.can_run.clear()
         
     def resume(self):
+        log.log("GpsThread pausing ....", log.LEVEL_DEBUG)
         self.can_run.set()
         
     def stop(self):
+        log.log("GpsThread stopping ....", log.LEVEL_DEBUG)
         self.pause()
         self.stop_program.set()

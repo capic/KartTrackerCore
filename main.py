@@ -156,8 +156,6 @@ def main(argv):
                 except Exception:
                     led.blink_error(e)
                     raise
-
-        gps_thread.join()
     except KeyError:
         log.log("Stop by the user", log.LEVEL_ERROR)
     except StopIteration:
@@ -166,6 +164,7 @@ def main(argv):
         session = None
         e.set()
         led.turn_off()
+        gps_thread.join()
 
     log.log("Cleanup program", log.LEVEL_INFO)
     GPIO.cleanup()
