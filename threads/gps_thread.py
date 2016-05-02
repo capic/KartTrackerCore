@@ -40,5 +40,6 @@ class GpsThread(Thread):
     def resume(self):
         self.can_run.set()
         
-    def set_stop_recording(self):
-        self.stop_recording.set()
+    def stop_program(self):
+        self.pause()
+        self.stop_program.set()
