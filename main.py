@@ -9,8 +9,10 @@ import threading
 from utils.led import Led
 from time import sleep
 from threads.gps_thread import GpsThread
+from threads.accelerometer_thread import AccelerometerThread
 
 gps_thread = GpsThread(db_session)
+accelerometer_thread = AccelerometerThread(db_session)
 
 
 def init_gpio():
@@ -117,6 +119,8 @@ def main(argv):
     try:
         gps_thread.start()
         gps_thread.pause()
+        accelerometer_thread.start()
+        accelerometer_thread.pause()
         
         track_id = args[0]
         track = db_session.query(Track).filter(Track.id == track_id).one()
@@ -132,6 +136,7 @@ def main(argv):
                     log.log("Button still pressed", log.LEVEL_DEBUG)
                     stop_program = True
                     gps_thread.stop()
+                    accelerometer_thread.stop()
 
             if not stop_program:
                 e.set()
@@ -143,8 +148,10 @@ def main(argv):
                     track_session = start_track_session(track.id)
 
                     gps_thread.resume()
+                    accelerometer_thread.resume()
                     GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
                     gps_thread.pause()
+                    accelerometer_thread.pause()
 
                     # GPIO.remove_event_detect(config.PIN_NUMBER_BUTTON)
                     log.log("Stop blinking ...", log.LEVEL_DEBUG)
@@ -165,6 +172,7 @@ def main(argv):
         e.set()
         led.turn_off()
         gps_thread.join()
+        accelerometer_thread.join()
 
     log.log("Cleanup program", log.LEVEL_INFO)
     GPIO.cleanup()
