@@ -40,6 +40,6 @@ class GpsThread(Thread):
     def resume(self):
         self.can_run.set()
         
-    def stop_program(self):
+    def stop(self):
         self.pause()
         self.stop_program.set()

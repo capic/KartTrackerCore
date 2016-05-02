@@ -131,7 +131,7 @@ def main(argv):
                 if GPIO.input(config.PIN_NUMBER_BUTTON) == GPIO.LOW:
                     log.log("Button still pressed", log.LEVEL_DEBUG)
                     stop_program = True
-                    gps_thread.stop_program()
+                    gps_thread.stop()
 
             e.set()
             e.clear()
