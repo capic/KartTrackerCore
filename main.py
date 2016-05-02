@@ -62,12 +62,7 @@ def init_config():
         log.log("Pin number led %d" % config.PIN_NUMBER_LED, log.LEVEL_DEBUG)
     else:
         print("config file not found")
-
-
-def stop_threads(channel):
-    log.log("Event detected stop recording !!!", log.LEVEL_DEBUG)
-    gps_thread.set_stop_recording()
-
+        
 
 def main(argv):
     try:
