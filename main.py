@@ -120,6 +120,9 @@ def main(argv):
 
     stop_program = False
     try:
+        gps_thread.start()
+        gps_thread.pause()
+        
         track_id = args[0]
         track = db_session.query(Track).filter(Track.id == track_id).one()
 
@@ -142,11 +145,11 @@ def main(argv):
                 # create new session and insert it
                 track_session = start_track_session(track.id)
 
-                gps_thread.start()
-                GPIO.add_event_detect(config.PIN_NUMBER_BUTTON, GPIO.FALLING, stop_threads)
-                gps_thread.join()
-
-                GPIO.remove_event_detect(config.PIN_NUMBER_BUTTON)
+                gps_thread.resume()
+                GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
+                gps_thread.pause()
+                
+                # GPIO.remove_event_detect(config.PIN_NUMBER_BUTTON)
                 log.log("Stop blinking ...", log.LEVEL_DEBUG)
                 e.set()
                 led.turn_on()
@@ -156,6 +159,8 @@ def main(argv):
             except Exception:
                 led.blink_error(e)
                 raise
+            
+        gps_thread.join()
     except KeyError:
         log.log("Stop by the user", log.LEVEL_ERROR)
     except StopIteration:
