@@ -34,6 +34,7 @@ class GpsThread(Thread):
                 else:
                     log.log("No gps datas", log.LEVEL_DEBUG)
         log.log("GpsThread will be stopped !!", log.LEVEL_DEBUG)
+        self.session = None
 
     def pause(self):
         log.log("GpsThread pausing ....", log.LEVEL_DEBUG)

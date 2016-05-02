@@ -168,7 +168,6 @@ def main(argv):
     except StopIteration:
         log.log("GPSD is stopped", log.LEVEL_ERROR)
     finally:
-        session = None
         e.set()
         led.turn_off()
         gps_thread.join()
