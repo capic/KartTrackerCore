@@ -12,14 +12,14 @@ class GpsThread(Thread):
         Thread.__init__(self)
         self.session = gps(mode=WATCH_ENABLE)
         self.db_session = db_session
-        self.stop_recording = Event()
+        self.can_run = Event()
         self.stop_program = Event()
 
     def run(self):
         while not self.stop_program.isSet():
-            self.stop_recording.wait()
+            self.can_run.wait()
             
-            while not self.stop_recording.isSet():
+            while self.can_run.isSet():
                 # get the gps datas
                 if self.session.waiting():
                     datas = self.session.next()
@@ -34,8 +34,11 @@ class GpsThread(Thread):
                 else:
                     log.log("No gps datas", log.LEVEL_DEBUG)
 
-    def set_stop_program(self):
-        self.stop_program.set()
+    def pause(self):
+        self.can_run.clear()
+        
+    def resume(self):
+        self.can_run.set()
         
     def set_stop_recording(self):
         self.stop_recording.set()
