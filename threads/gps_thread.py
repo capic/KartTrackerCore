@@ -1,6 +1,7 @@
 __author__ = 'Vincent'
 
 from threading import Thread
+from threading import Event
 from gps import *
 from utils.bdd import *
 from utils.functions import *
@@ -12,12 +13,10 @@ class GpsThread(Thread):
         Thread.__init__(self)
         self.session = gps(mode=WATCH_ENABLE)
         self.db_session = db_session
-        self.stop_recording = False
+        self._stopevent = Event()
 
     def run(self):
-        self.stop_recording = False
-
-        while not self.stop_recording:
+        while not self._stopevent.isSet():
             # get the gps datas
             if self.session.waiting():
                 datas = self.session.next()
@@ -32,5 +31,5 @@ class GpsThread(Thread):
             else:
                 log.log("No gps datas", log.LEVEL_DEBUG)
 
-    def set_stop_recording(self, value):
-        self.stop_recording = value
+    def set_stop_recording(self):
+        self._stopevent.set()

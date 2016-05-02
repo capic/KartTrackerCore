@@ -66,7 +66,7 @@ def init_config():
 
 def stop_threads():
     log.log("Event detected stop recording !!!", log.LEVEL_DEBUG)
-    gps_thread.set_stop_recording(True)
+    gps_thread.set_stop_recording()
 
 
 def main(argv):
