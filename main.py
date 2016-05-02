@@ -64,7 +64,7 @@ def init_config():
         print("config file not found")
 
 
-def stop_threads():
+def stop_threads(channel):
     log.log("Event detected stop recording !!!", log.LEVEL_DEBUG)
     gps_thread.set_stop_recording()
 
