@@ -7,56 +7,25 @@ import math
 from utils.bdd import *
 from utils.functions import *
 
-# Power management registers
-power_mgmt_1 = 0x6b
-power_mgmt_2 = 0x6c
-
-
-def read_byte(adr):
-    return bus.read_byte_data(address, adr)
-
-
-def read_word(adr):
-    high = bus.read_byte_data(address, adr)
-    low = bus.read_byte_data(address, adr + 1)
-    val = (high << 8) + low
-    return val
-
-
-def read_word_2c(adr):
-    val = read_word(adr)
-    if (val >= 0x8000):
-        return -((65535 - val) + 1)
-    else:
-        return val
-
-
-def dist(a, b):
-    return math.sqrt((a * a) + (b * b))
-
-
-def get_y_rotation(x, y, z):
-    radians = math.atan2(x, dist(y, z))
-    return -math.degrees(radians)
-
-
-def get_x_rotation(x, y, z):
-    radians = math.atan2(y, dist(x, z))
-    return math.degrees(radians)
-
-
-bus = smbus.SMBus(0)  # or bus = smbus.SMBus(1) for Revision 2 boards
-address = 0x68  # This is the address value read via the i2cdetect command
-
 
 class AccelerometerThread(Thread):
+    # Power management registers
+    POWER_MGMT_1 = 0x6b
+    POWER_MGMT_2 = 0x6c
+    ADDRESS = 0x68  # This is the address value read via the i2cdetect command
+    
     def __init__(self, db_session):
         Thread.__init__(self)
-        bus.write_byte_data(address, power_mgmt_1, 0)
         self.db_session = db_session
         self.can_run = Event()
         self.stop_program = Event()
-
+        try:
+            self.bus = smbus.SMBus(0)  # or bus = smbus.SMBus(1) for Revision 2 boards
+            self.bus.write_byte_data(ADRRESS, POWER_MGMT_1, 0)
+        Exception:
+            log.log("Error smbus", log.LEVEL_ERROR)
+            self.stop()
+            
     def run(self):
         while not self.stop_program.isSet():
             self.can_run.wait()
@@ -91,3 +60,30 @@ class AccelerometerThread(Thread):
         log.log("AccelerometerThread stopping ....", log.LEVEL_DEBUG)
         self.stop_program.set()
         self.resume()
+        
+    def read_byte(adr):
+        return bus.read_byte_data(ADDRESS, adr)
+
+    def read_word(adr):
+        high = bus.read_byte_data(ADDRESS, adr)
+        low = bus.read_byte_data(ADDRESS, adr + 1)
+        val = (high << 8) + low
+        return val
+    
+    def read_word_2c(adr):
+        val = read_word(adr)
+        if (val >= 0x8000):
+            return -((65535 - val) + 1)
+        else:
+            return val
+    
+    def dist(a, b):
+        return math.sqrt((a * a) + (b * b))
+    
+    def get_y_rotation(x, y, z):
+        radians = math.atan2(x, dist(y, z))
+        return -math.degrees(radians)
+    
+    def get_x_rotation(x, y, z):
+        radians = math.atan2(y, dist(x, z))
+        return math.degrees(radians)
