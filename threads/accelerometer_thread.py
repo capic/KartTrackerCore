@@ -21,7 +21,7 @@ class AccelerometerThread(Thread):
         self.stop_program = Event()
         try:
             self.bus = smbus.SMBus(0)  # or bus = smbus.SMBus(1) for Revision 2 boards
-            self.bus.write_byte_data(ADRRESS, POWER_MGMT_1, 0)
+            self.bus.write_byte_data(self.ADRRESS, self.POWER_MGMT_1, 0)
         except Exception:
             log.log("Error smbus", log.LEVEL_ERROR)
             self.stop()
@@ -31,14 +31,14 @@ class AccelerometerThread(Thread):
             self.can_run.wait()
 
             while not self.stop_program.isSet() and self.can_run.isSet():
-                gyro_x = (read_word_2c(0x43) / 131)
-                gyro_y = (read_word_2c(0x45) / 131)
-                gyro_z = (read_word_2c(0x47) / 131)
-                accel_x = (read_word_2c(0x3b) / 16384.0)
-                accel_y = (read_word_2c(0x3d) / 16384.0)
-                accel_z = (read_word_2c(0x3f) / 16384.0)
-                rot_x = get_x_rotation(accel_x, accel_y, accel_z)
-                rot_y = get_y_rotation(accel_x, accel_y, accel_z)
+                gyro_x = (self.read_word_2c(0x43) / 131)
+                gyro_y = (self.read_word_2c(0x45) / 131)
+                gyro_z = (self.read_word_2c(0x47) / 131)
+                accel_x = (self.read_word_2c(0x3b) / 16384.0)
+                accel_y = (self.read_word_2c(0x3d) / 16384.0)
+                accel_z = (self.read_word_2c(0x3f) / 16384.0)
+                rot_x = self.get_x_rotation(accel_x, accel_y, accel_z)
+                rot_y = self.get_y_rotation(accel_x, accel_y, accel_z)
                 accelerometer_data = AccelerometerData(gyroscope_x=gyro_x, gyroscope_y=gyro_y, gyroscope_z=gyro_z,
                                                        accelerometer_x=accel_x, accelerometer_y=accel_y,
                                                        accelerometer_z=accel_z, rotation_x=rot_x, rotation_y=rot_y)
@@ -61,29 +61,29 @@ class AccelerometerThread(Thread):
         self.stop_program.set()
         self.resume()
         
-    def read_byte(adr):
-        return bus.read_byte_data(ADDRESS, adr)
+    def read_byte(self, adr):
+        return self.bus.read_byte_data(self.ADDRESS, adr)
 
-    def read_word(adr):
-        high = bus.read_byte_data(ADDRESS, adr)
-        low = bus.read_byte_data(ADDRESS, adr + 1)
+    def read_word(self, adr):
+        high = self.bus.read_byte_data(self.ADDRESS, adr)
+        low = self.bus.read_byte_data(self.ADDRESS, adr + 1)
         val = (high << 8) + low
         return val
     
-    def read_word_2c(adr):
-        val = read_word(adr)
-        if (val >= 0x8000):
+    def read_word_2c(self, adr):
+        val = self.read_word(adr)
+        if val >= 0x8000:
             return -((65535 - val) + 1)
         else:
             return val
     
-    def dist(a, b):
+    def dist(self, a, b):
         return math.sqrt((a * a) + (b * b))
     
-    def get_y_rotation(x, y, z):
-        radians = math.atan2(x, dist(y, z))
+    def get_y_rotation(self, x, y, z):
+        radians = math.atan2(x, self.dist(y, z))
         return -math.degrees(radians)
     
-    def get_x_rotation(x, y, z):
-        radians = math.atan2(y, dist(x, z))
+    def get_x_rotation(self, x, y, z):
+        radians = math.atan2(y, self.dist(x, z))
         return math.degrees(radians)
