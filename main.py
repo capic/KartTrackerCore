@@ -170,10 +170,10 @@ def main(argv):
     except StopIteration:
         log.log("GPSD is stopped", log.LEVEL_ERROR)
     finally:
-        e.set()
-        led.turn_off()
         gps_thread.join()
         accelerometer_thread.join()
+        e.set()
+        led.turn_off()
 
     log.log("Cleanup program", log.LEVEL_INFO)
     GPIO.cleanup()
