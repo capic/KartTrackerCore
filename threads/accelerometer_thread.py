@@ -22,7 +22,7 @@ class AccelerometerThread(Thread):
         try:
             self.bus = smbus.SMBus(0)  # or bus = smbus.SMBus(1) for Revision 2 boards
             self.bus.write_byte_data(ADRRESS, POWER_MGMT_1, 0)
-        Exception:
+        except Exception:
             log.log("Error smbus", log.LEVEL_ERROR)
             self.stop()
             
