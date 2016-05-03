@@ -170,6 +170,8 @@ def main(argv):
     except StopIteration:
         log.log("GPSD is stopped", log.LEVEL_ERROR)
     finally:
+        gps_thread.stop()
+        accelerometer_thread.stop()
         gps_thread.join()
         accelerometer_thread.join()
         e.set()
