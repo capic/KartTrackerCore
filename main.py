@@ -130,8 +130,10 @@ def main(argv):
             print("Push button to start recording or long press to quit")
             GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
             sleep(0.5)
+            # after a short wait we test if the button is still pressed to avoid to wait a long time if we do a short pressed
             if GPIO.input(config.PIN_NUMBER_BUTTON) == GPIO.LOW:
                 sleep(2)
+                # if it's still pressed then we have to quit the program
                 if GPIO.input(config.PIN_NUMBER_BUTTON) == GPIO.LOW:
                     log.log("Button still pressed", log.LEVEL_DEBUG)
                     stop_program = True
