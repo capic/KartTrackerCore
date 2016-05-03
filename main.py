@@ -127,7 +127,7 @@ def main(argv):
 
         # il faut pouvoir arreter le programme depuis l'interface
         while not stop_program:
-            print("Push button to start")
+            print("Push button to start recording or long press to quit")
             GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
             sleep(0.5)
             if GPIO.input(config.PIN_NUMBER_BUTTON) == GPIO.LOW:
