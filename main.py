@@ -64,7 +64,7 @@ def init_config():
         log.log("Pin number led %d" % config.PIN_NUMBER_LED, log.LEVEL_DEBUG)
     else:
         print("config file not found")
-        
+
 
 def main(argv):
     try:
@@ -124,66 +124,67 @@ def main(argv):
         log.log("No track id chosen", log.LEVEL_ERROR)
         stop_program = True
 
-    try:
-        gps_thread.start()
-        gps_thread.pause()
-        accelerometer_thread.start()
-        accelerometer_thread.pause()
-        
-        track_id = args[0]
-        track = db_session.query(Track).filter(Track.id == track_id).one()
+    if not stop_program:
+        try:
+            gps_thread.start()
+            gps_thread.pause()
+            accelerometer_thread.start()
+            accelerometer_thread.pause()
 
-        # il faut pouvoir arreter le programme depuis l'interface
-        while not stop_program:
-            print("Push button to start recording or long press to quit")
-            GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
-            sleep(0.5)
-            # after a short wait we test if the button is still pressed to avoid to wait a long time if we do a short pressed
-            if GPIO.input(config.PIN_NUMBER_BUTTON) == GPIO.LOW:
-                sleep(2)
-                # if it's still pressed then we have to quit the program
+            track_id = args[0]
+            track = db_session.query(Track).filter(Track.id == track_id).one()
+
+            # il faut pouvoir arreter le programme depuis l'interface
+            while not stop_program:
+                print("Push button to start recording or long press to quit")
+                GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
+                sleep(0.5)
+                # after a short wait we test if the button is still pressed to avoid to wait a long time if we do a short pressed
                 if GPIO.input(config.PIN_NUMBER_BUTTON) == GPIO.LOW:
-                    log.log("Button still pressed", log.LEVEL_DEBUG)
-                    stop_program = True
-                    gps_thread.stop()
-                    accelerometer_thread.stop()
+                    sleep(2)
+                    # if it's still pressed then we have to quit the program
+                    if GPIO.input(config.PIN_NUMBER_BUTTON) == GPIO.LOW:
+                        log.log("Button still pressed", log.LEVEL_DEBUG)
+                        stop_program = True
+                        gps_thread.stop()
+                        accelerometer_thread.stop()
 
-            if not stop_program:
-                e.set()
-                e.clear()
-                led.blink(e)
-
-                try:
-                    # create new session and insert it
-                    track_session = start_track_session(track.id)
-
-                    gps_thread.resume()
-                    accelerometer_thread.resume()
-                    GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
-                    gps_thread.pause()
-                    accelerometer_thread.pause()
-
-                    # GPIO.remove_event_detect(config.PIN_NUMBER_BUTTON)
-                    log.log("Stop blinking ...", log.LEVEL_DEBUG)
+                if not stop_program:
                     e.set()
-                    led.turn_on()
-                    time.sleep(.5)
+                    e.clear()
+                    led.blink(e)
 
-                    end_track_session(track_session)
-                except Exception:
-                    led.blink_error(e)
-                    raise
-    except KeyError:
-        log.log("Stop by the user", log.LEVEL_ERROR)
-    except StopIteration:
-        log.log("GPSD is stopped", log.LEVEL_ERROR)
-    finally:
-        gps_thread.stop()
-        accelerometer_thread.stop()
-        gps_thread.join()
-        accelerometer_thread.join()
-        e.set()
-        led.turn_off()
+                    try:
+                        # create new session and insert it
+                        track_session = start_track_session(track.id)
+
+                        gps_thread.resume()
+                        accelerometer_thread.resume()
+                        GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
+                        gps_thread.pause()
+                        accelerometer_thread.pause()
+
+                        # GPIO.remove_event_detect(config.PIN_NUMBER_BUTTON)
+                        log.log("Stop blinking ...", log.LEVEL_DEBUG)
+                        e.set()
+                        led.turn_on()
+                        time.sleep(.5)
+
+                        end_track_session(track_session)
+                    except Exception:
+                        led.blink_error(e)
+                        raise
+        except KeyError:
+            log.log("Stop by the user", log.LEVEL_ERROR)
+        except StopIteration:
+            log.log("GPSD is stopped", log.LEVEL_ERROR)
+
+    gps_thread.stop()
+    accelerometer_thread.stop()
+    gps_thread.join()
+    accelerometer_thread.join()
+    e.set()
+    led.turn_off()
 
     log.log("Cleanup program", log.LEVEL_INFO)
     GPIO.cleanup()
