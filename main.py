@@ -76,6 +76,10 @@ def main(argv):
     to_upload = False
     to_download = False
 
+    led = Led(config.PIN_NUMBER_LED)
+    led.turn_on()
+    e = threading.Event()
+
     for o, a in opts:
         if o in ("-u", "--upload"):
             log.log("Upload mode", log.LEVEL_DEBUG)
@@ -95,10 +99,20 @@ def main(argv):
             assert False, "unhandled option"
 
     if to_upload:
+        e.set()
+        e.clear()
+        led.blink_database_treatment(e)
         send_to_central_database()
+        e.set()
+        e.clear()
 
     if to_download:
+        e.set()
+        e.clear()
+        led.blink_database_treatment(e)
         update_from_central_database()
+        e.set()
+        e.clear()
 
     log.log("Starting ....", log.LEVEL_INFO)
 
@@ -109,11 +123,6 @@ def main(argv):
     init_gpio()
 
     engine.connect()
-
-    led = Led(config.PIN_NUMBER_LED)
-    led.turn_on()
-
-    e = threading.Event()
 
     stop_program = False
     try:

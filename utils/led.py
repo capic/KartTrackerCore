@@ -16,11 +16,17 @@ class Led:
 
     def blink_error(self, e):
         delay = 0.1
-        t1 = threading.Thread(target=self.blink_thread, args=(delay, e))
-        t1.start()
+        self.__common_blink__(delay, e)
 
     def blink(self, e):
         delay = 0.5
+        self.__common_blink__(delay, e)
+
+    def blink_database_treatment(self, e):
+        delay = 0.1
+        self.__common_blink__(delay, e)
+
+    def __common_blink__(self, delay, e):
         t1 = threading.Thread(target=self.blink_thread, args=(delay, e))
         t1.start()
 
