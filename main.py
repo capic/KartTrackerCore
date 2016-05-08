@@ -192,4 +192,5 @@ def main(argv):
 
 
 if __name__ == "__main__":
+    print("sys.argv =========> %s" % sys.argv)
     main(sys.argv[1:])
