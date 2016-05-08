@@ -73,6 +73,8 @@ def main(argv):
         exit()
 
     init_config()
+    init_gpio()
+
     to_upload = False
     to_download = False
 
@@ -119,8 +121,6 @@ def main(argv):
     if len(args) != 1:
         log.log("No track id chosen", log.LEVEL_ERROR)
         exit()
-
-    init_gpio()
 
     engine.connect()
 
