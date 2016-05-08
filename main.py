@@ -124,7 +124,7 @@ def main(argv):
         log.log("No track id chosen", log.LEVEL_ERROR)
         stop_program = True
     else:
-        log.log("Track id: %s" % args[0])
+        log.log("Track id: %s" % args[0], log.LEVEL_DEBUG)
 
     if not stop_program:
         try:
