@@ -106,7 +106,6 @@ def main(argv):
         led.blink_database_treatment(e)
         send_to_central_database()
         e.set()
-        e.clear()
 
     if to_download:
         e.set()
@@ -114,17 +113,17 @@ def main(argv):
         led.blink_database_treatment(e)
         update_from_central_database()
         e.set()
-        e.clear()
 
     log.log("Starting ....", log.LEVEL_INFO)
-
-    if len(args) != 1:
-        log.log("No track id chosen", log.LEVEL_ERROR)
-        exit()
 
     engine.connect()
 
     stop_program = False
+
+    if len(args) != 1:
+        log.log("No track id chosen", log.LEVEL_ERROR)
+        stop_program = True
+
     try:
         gps_thread.start()
         gps_thread.pause()
