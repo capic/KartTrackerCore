@@ -107,6 +107,6 @@ def start_track_session(track_id):
 def end_track_session(track_session):
     log.log("end_track_session", log.LEVEL_INFO)
     # update the session with end date time
-    track_session.end_date_time = datetime.utcnow().time()
+    track_session.end_time = datetime.utcnow().time()
     log.log("Update: %s" % str(track_session), log.LEVEL_DEBUG)
     db_session.commit()
