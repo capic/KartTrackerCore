@@ -106,6 +106,7 @@ def main(argv):
         led.blink_database_treatment(e)
         send_to_central_database()
         e.set()
+        led.turn_on()
 
     if to_download:
         e.set()
@@ -113,6 +114,7 @@ def main(argv):
         led.blink_database_treatment(e)
         update_from_central_database()
         e.set()
+        led.turn_on()
 
     log.log("Starting ....", log.LEVEL_INFO)
 
