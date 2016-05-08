@@ -14,16 +14,16 @@ class AccelerometerThread(Thread):
     POWER_MGMT_2 = 0x6c
     ADDRESS = 0x68  # This is the address value read via the i2cdetect command
     
-    def __init__(self, db_session):
+    def __init__(self, session_db):
         Thread.__init__(self)
-        self.db_session = db_session
+        self.db_session = session_db
         self.can_run = Event()
         self.stop_program = Event()
         try:
             self.bus = smbus.SMBus(0)  # or bus = smbus.SMBus(1) for Revision 2 boards
             self.bus.write_byte_data(self.ADRRESS, self.POWER_MGMT_1, 0)
         except Exception:
-            log.log("Error smbus", log.LEVEL_DEBUG)
+            log.log("Error smbus", log.LEVEL_ERROR)
             self.stop()
             
     def run(self):

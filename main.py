@@ -159,7 +159,7 @@ def main(argv):
                     log.log("Stop blinking ...", log.LEVEL_DEBUG)
                     e.set()
                     led.turn_on()
-                    time.sleep(1)
+                    time.sleep(.5)
 
                     end_track_session(track_session)
                 except Exception:

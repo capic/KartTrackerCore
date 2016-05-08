@@ -8,10 +8,10 @@ from utils.functions import *
 
 
 class GpsThread(Thread):
-    def __init__(self, db_session):
+    def __init__(self, session_db):
         Thread.__init__(self)
         self.session = gps(mode=WATCH_ENABLE)
-        self.db_session = db_session
+        self.db_session = session_db
         self.can_run = Event()
         self.stop_program = Event()
 
