@@ -123,6 +123,8 @@ def main(argv):
     if len(args) != 1:
         log.log("No track id chosen", log.LEVEL_ERROR)
         stop_program = True
+    else:
+        log.log("Track id: %s" % args[0])
 
     if not stop_program:
         try:
@@ -185,7 +187,7 @@ def main(argv):
             accelerometer_thread.join()
 
     e.set()
-    led.turn_off()
+    # led.turn_off()
 
     log.log("Cleanup program", log.LEVEL_INFO)
     GPIO.cleanup()
