@@ -101,18 +101,24 @@ def main(argv):
             assert False, "unhandled option"
 
     if to_upload:
-        e.clear()
-        led.blink_database_treatment(e)
-        send_to_central_database()
-        e.set()
-        led.turn_on()
+        try:
+            e.clear()
+            led.blink_database_treatment(e)
+            send_to_central_database()
+            e.set()
+            led.turn_on()
+        except:
+            led.blink_error(e)
 
     if to_download:
-        e.clear()
-        led.blink_database_treatment(e)
-        update_from_central_database()
-        e.set()
-        led.turn_on()
+        try:
+            e.clear()
+            led.blink_database_treatment(e)
+            update_from_central_database()
+            e.set()
+            led.turn_on()
+        except:
+            led.blink_error(e)
 
     log.log("Starting ....", log.LEVEL_INFO)
 
