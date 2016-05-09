@@ -111,6 +111,7 @@ def main(argv):
         except:
             led_thread.set_type_blink_error()
             led_thread.resume()
+            sleep(2)
             stop_program = True
 
     if to_download:
@@ -122,6 +123,7 @@ def main(argv):
         except:
             led_thread.set_type_blink_error()
             led_thread.resume()
+            sleep(2)
             stop_program = True
 
     led_thread.turn_on()
