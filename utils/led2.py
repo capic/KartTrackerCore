@@ -19,7 +19,7 @@ class Led(Thread):
             log.log("Blink in pause", log.LEVEL_DEBUG)
             self.blinking.wait()
 
-            while self.blinking.is_set():
+            while not self.stop_program.isSet() and self.blinking.is_set():
                 GPIO.output(self._GPIOPORT, False)
                 time.sleep(self.delay_off)
                 GPIO.output(self._GPIOPORT, True)
