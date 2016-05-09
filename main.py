@@ -198,8 +198,9 @@ def main(argv):
             gps_thread.join()
             accelerometer_thread.join()
 
-    led_thread.join()
     led_thread.stop()
+    led_thread.join()
+
 
     led_thread.turn_off()
 
