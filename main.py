@@ -5,7 +5,6 @@ from gps import *
 from utils.bdd import *
 from utils.functions import *
 import os
-import threading
 from utils.led2 import Led
 from time import sleep
 from threads.gps_thread import GpsThread
@@ -154,7 +153,7 @@ def main(argv):
             # il faut pouvoir arreter le programme depuis l'interface
             while not stop_program:
                 print("Push button to start recording or long press to quit")
-                GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
+                GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING) or raw_input()
                 sleep(0.5)
                 # after a short wait we test if the button is still pressed to avoid to wait a long time if we do a short pressed
                 if GPIO.input(config.PIN_NUMBER_BUTTON) == GPIO.LOW:
