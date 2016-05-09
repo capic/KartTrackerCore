@@ -27,7 +27,6 @@ class AccelerometerThread(Thread):
             self.stop()
             
     def run(self):
-        log.log("I set ? %s" % self.stop_program.isSet(), log.LEVEL_DEBUG)
         while not self.stop_program.isSet():
             self.can_run.wait()
 

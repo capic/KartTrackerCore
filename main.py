@@ -6,7 +6,7 @@ from utils.bdd import *
 from utils.functions import *
 import os
 import threading
-from utils.led import Led
+from utils.led2 import Led
 from time import sleep
 from threads.gps_thread import GpsThread
 from threads.accelerometer_thread import AccelerometerThread
@@ -78,9 +78,9 @@ def main(argv):
     to_upload = False
     to_download = False
 
-    led = Led(config.PIN_NUMBER_LED)
-    led.turn_on()
-    e = threading.Event()
+    led_thread = Led(config.PIN_NUMBER_LED)
+    led_thread.start()
+    led_thread.turn_on()
 
     for o, a in opts:
         if o in ("-u", "--upload"):
@@ -100,31 +100,35 @@ def main(argv):
         else:
             assert False, "unhandled option"
 
+    stop_program = False
+
     if to_upload:
         try:
-            e.clear()
-            led.blink_database_treatment(e)
+            led_thread.set_type_blink_database_treatment()
+            led_thread.resume()
             send_to_central_database()
-            e.set()
-            led.turn_on()
+            led_thread.pause()
         except:
-            led.blink_error(e)
+            led_thread.set_type_blink_error()
+            led_thread.resume()
+            stop_program = True
 
     if to_download:
         try:
-            e.clear()
-            led.blink_database_treatment(e)
+            led_thread.set_type_blink_database_treatment()
+            led_thread.resume()
             update_from_central_database()
-            e.set()
-            led.turn_on()
+            led_thread.pause()
         except:
-            led.blink_error(e)
+            led_thread.set_type_blink_error()
+            led_thread.resume()
+            stop_program = True
+
+    led_thread.turn_on()
 
     log.log("Starting ....", log.LEVEL_INFO)
 
     engine.connect()
-
-    stop_program = False
 
     if len(args) != 1:
         log.log("No track id chosen", log.LEVEL_ERROR)
@@ -138,6 +142,7 @@ def main(argv):
             gps_thread.pause()
             accelerometer_thread.start()
             accelerometer_thread.pause()
+            led_thread.set_type_blink()
 
             track_id = args[0]
             track = db_session.query(Track).filter(Track.id == track_id).one()
@@ -158,9 +163,7 @@ def main(argv):
                         accelerometer_thread.stop()
 
                 if not stop_program:
-                    e.set()
-                    e.clear()
-                    led.blink(e)
+                    led_thread.resume()
 
                     try:
                         # create new session and insert it
@@ -174,13 +177,15 @@ def main(argv):
 
                         # GPIO.remove_event_detect(config.PIN_NUMBER_BUTTON)
                         log.log("Stop blinking ...", log.LEVEL_DEBUG)
-                        e.set()
-                        led.turn_on()
+                        led_thread.pause()
+                        led_thread.turn_on()
                         time.sleep(.5)
 
                         end_track_session(track_session)
                     except Exception:
-                        led.blink_error(e)
+                        led_thread.pause()
+                        led_thread.set_type_blink_error()
+                        led_thread.resume()
                         raise
         except KeyError:
             log.log("Stop by the user", log.LEVEL_ERROR)
@@ -193,9 +198,8 @@ def main(argv):
             gps_thread.join()
             accelerometer_thread.join()
 
-    led.stop()
-    e.set()
-    led.turn_off()
+    led_thread.stop()
+    led_thread.turn_off()
 
     log.log("Cleanup program", log.LEVEL_INFO)
     GPIO.cleanup()
