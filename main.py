@@ -107,24 +107,26 @@ def main(argv):
             led_thread.set_type_blink_database_treatment()
             led_thread.resume()
             send_to_central_database()
-            led_thread.pause()
         except:
             led_thread.set_type_blink_error()
             led_thread.resume()
             sleep(2)
             stop_program = True
+        finally:
+            led_thread.pause()
 
     if to_download:
         try:
             led_thread.set_type_blink_database_treatment()
             led_thread.resume()
             update_from_central_database()
-            led_thread.pause()
         except:
             led_thread.set_type_blink_error()
             led_thread.resume()
             sleep(2)
             stop_program = True
+        finally:
+            led_thread.pause()
 
     led_thread.turn_on()
 
