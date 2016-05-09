@@ -159,8 +159,6 @@ def main(argv):
                     if GPIO.input(config.PIN_NUMBER_BUTTON) == GPIO.LOW:
                         log.log("Button still pressed", log.LEVEL_DEBUG)
                         stop_program = True
-                        gps_thread.stop()
-                        accelerometer_thread.stop()
 
                 if not stop_program:
                     led_thread.resume()
@@ -200,8 +198,6 @@ def main(argv):
 
     led_thread.stop()
     led_thread.join()
-
-
     led_thread.turn_off()
 
     log.log("Cleanup program", log.LEVEL_INFO)
