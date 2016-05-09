@@ -7,6 +7,10 @@ import time
 class Led:
     def __init__(self, pin):
         self._GPIOPORT = pin
+        self.stop_program = False
+
+    def stop_program(self):
+        self.stop_program = True
 
     def turn_on(self):
         GPIO.output(self._GPIOPORT, True)
@@ -38,4 +42,5 @@ class Led:
             GPIO.output(self._GPIOPORT, True)
             time.sleep(delaytime_on)
 
-        event.wait()
+        if not self.stop_program:
+            event.wait()
