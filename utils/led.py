@@ -9,7 +9,7 @@ class Led:
         self._GPIOPORT = pin
         self.stop_program = False
 
-    def stop_program(self):
+    def stop(self):
         self.stop_program = True
 
     def turn_on(self):
