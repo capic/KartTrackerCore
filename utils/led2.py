@@ -2,7 +2,7 @@ __author__ = 'Vincent'
 import RPi.GPIO as GPIO
 from threading import Thread
 from threading import Event
-import time
+from utils.functions import *
 
 
 class Led(Thread):
@@ -16,6 +16,7 @@ class Led(Thread):
 
     def run(self):
         while not self.stop_program.isSet():
+            log.log("Blink in pause", log.LEVEL_DEBUG)
             self.blinking.wait()
 
             while self.blinking.is_set():
@@ -23,6 +24,8 @@ class Led(Thread):
                 time.sleep(self.delay_off)
                 GPIO.output(self._GPIOPORT, True)
                 time.sleep(self.delay_on)
+
+        log.log("Blink thread finished", log.LEVEL_DEBUG)
 
     def resume(self):
         self.blinking.set()
