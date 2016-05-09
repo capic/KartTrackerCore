@@ -28,12 +28,15 @@ class Led(Thread):
         log.log("Blink thread finished", log.LEVEL_DEBUG)
 
     def resume(self):
+        log.log("Led thread resuming", log.LEVEL_DEBUG)
         self.blinking.set()
 
     def pause(self):
+        log.log("Led thread pausing", log.LEVEL_DEBUG)
         self.blinking.clear()
 
     def stop(self):
+        log.log("Led thread stop", log.LEVEL_DEBUG)
         self.stop_program.set()
         self.resume()
 
