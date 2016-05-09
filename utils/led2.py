@@ -32,6 +32,7 @@ class Led(Thread):
 
     def stop(self):
         self.stop_program.set()
+        self.resume()
 
     def turn_on(self):
         GPIO.output(self._GPIOPORT, True)

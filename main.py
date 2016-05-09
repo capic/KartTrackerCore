@@ -199,6 +199,7 @@ def main(argv):
             accelerometer_thread.join()
 
     led_thread.stop()
+
     led_thread.turn_off()
 
     log.log("Cleanup program", log.LEVEL_INFO)
