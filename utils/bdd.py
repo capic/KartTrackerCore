@@ -42,7 +42,8 @@ def send_to_central_database():
         json_tracks = json_dumps(ret, cls=new_alchemy_encoder(False, []), check_circular=False)
         unirest.timeout(99999)
         param = {"datas": json_tracks}
-        response = unirest.post(config.REST_ADDRESS + 'tracks/list', headers={"Accept": "application/json"}, params=param)
+        response = unirest.post(config.REST_ADDRESS + 'tracks/list', headers={"Accept": "application/json"},
+                                params=param)
 
         if response.code != 200:
             log.log("Insertion error: %s" % response.body, log.LEVEL_ERROR)
@@ -58,10 +59,12 @@ def send_to_central_database():
     ret = db_session.query(Session).all()
     log.log("Number of session to send: %d" % len(ret), log.LEVEL_DEBUG)
     if len(ret) > 0:
-        json_sessions = json.dumps(ret, cls=new_alchemy_encoder(False, ['gps_datas']), check_circular=False)
+        json_sessions = json.dumps(ret, cls=new_alchemy_encoder(False, ['gps_datas', 'accelerometer_data']),
+                                   check_circular=False)
         unirest.timeout(99999)
         param = {"datas": json_sessions}
-        response = unirest.post(config.REST_ADDRESS + 'sessions/list', headers={"Accept": "application/json"}, params=param)
+        response = unirest.post(config.REST_ADDRESS + 'sessions/list', headers={"Accept": "application/json"},
+                                params=param)
 
         if response.code != 200:
             log.log("Insertion error: %s" % response.body, log.LEVEL_ERROR)
