@@ -10,7 +10,6 @@ from utils.functions import *
 class GpsThread(Thread):
     def __init__(self, session_db):
         Thread.__init__(self)
-        self.session = gps(mode=WATCH_ENABLE)
         self.db_session = session_db
         self.recording_interval = 0
         self.track_session_id = 0
@@ -24,13 +23,15 @@ class GpsThread(Thread):
         self.track_session_id = track_session_id
 
     def run(self):
+        session = gps(mode=WATCH_ENABLE)
+
         while not self.stop_program.isSet():
             self.can_run.wait()
 
             while not self.stop_program.isSet() and self.can_run.isSet():
                 # get the gps datas
-                # if self.session.waiting():
-                datas = self.session.next()
+                if session.waiting():
+                    datas = session.next()
 
                 if datas['class'] == "TPV":
                     # create gps datas and insert it
@@ -44,8 +45,9 @@ class GpsThread(Thread):
                     log.log("No gps datas", log.LEVEL_DEBUG)
 
                 time.sleep(self.recording_interval)
+
         log.log("GpsThread will be stopped !!", log.LEVEL_DEBUG)
-        self.session = None
+        session = None
 
     def pause(self):
         log.log("GpsThread pausing ....", log.LEVEL_DEBUG)
