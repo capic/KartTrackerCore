@@ -50,7 +50,7 @@ class AccelerometerThread(Thread):
                 accelerometer_data = AccelerometerData(gyroscope_x=gyro_x, gyroscope_y=gyro_y, gyroscope_z=gyro_z,
                                                        accelerometer_x=accel_x, accelerometer_y=accel_y,
                                                        accelerometer_z=accel_z, rotation_x=rot_x, rotation_y=rot_y,
-                                                       date_time=datetime.now().strftime('%Y-%m-%d %H:%M:%f'),
+                                                       date_time=datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'),
                                                        session_id=self.track_session_id)
                 log.log("Insert: " + str(accelerometer_data), log.LEVEL_DEBUG)
                 self.db_session.add(accelerometer_data)
