@@ -10,8 +10,8 @@ from time import sleep
 from threads.gps_thread import GpsThread
 from threads.accelerometer_thread import AccelerometerThread
 
-gps_thread = GpsThread(db_session, config.RECORDING_INTERVAL)
-accelerometer_thread = AccelerometerThread(db_session, config.RECORDING_INTERVAL)
+gps_thread = GpsThread(db_session)
+accelerometer_thread = AccelerometerThread(db_session)
 
 
 def init_gpio():
@@ -171,6 +171,10 @@ def main(argv):
                     try:
                         # create new session and insert it
                         track_session = start_track_session(track.id)
+                        gps_thread.set_recording_inteval(config.RECORDING_INTERVAL)
+                        accelerometer_thread.set_recording_inteval(config.RECORDING_INTERVAL)
+                        gps_thread.set_track_session_id(track_session.id)
+                        accelerometer_thread.set_track_session_id(track_session.id)
 
                         gps_thread.resume()
                         accelerometer_thread.resume()
