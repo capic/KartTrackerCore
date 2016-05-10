@@ -10,8 +10,8 @@ from time import sleep
 from threads.gps_thread import GpsThread
 from threads.accelerometer_thread import AccelerometerThread
 
-gps_thread = GpsThread(db_session)
-accelerometer_thread = AccelerometerThread(db_session)
+gps_thread = GpsThread(db_session, config.RECORDING_INTERVAL)
+accelerometer_thread = AccelerometerThread(db_session, config.RECORDING_INTERVAL)
 
 
 def init_gpio():
