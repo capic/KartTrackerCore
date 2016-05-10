@@ -53,6 +53,8 @@ def init_config():
             config.PIN_NUMBER_BUTTON = config_object['pin_number_button']
         if 'pin_number_led' in config_object:
             config.PIN_NUMBER_LED = config_object['pin_number_led']
+        if 'recording_interval' in config_object:
+            config.RECORDING_INTERVAL = config_object['recording_interval']
 
         log.log("Bdd path: %s" % config.BDD_PATH, log.LEVEL_DEBUG)
         log.log("Rest Address: %s" % config.REST_ADDRESS, log.LEVEL_DEBUG)

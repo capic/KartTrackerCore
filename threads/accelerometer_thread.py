@@ -14,11 +14,12 @@ class AccelerometerThread(Thread):
     POWER_MGMT_2 = 0x6c
     ADDRESS = 0x68  # This is the address value read via the i2cdetect command
     
-    def __init__(self, session_db):
+    def __init__(self, session_db, recording_interval):
         Thread.__init__(self)
         self.db_session = session_db
         self.can_run = Event()
         self.stop_program = Event()
+        self.recording_interval = recording_interval
         try:
             self.bus = smbus.SMBus(1)  # or bus = smbus.SMBus(1) for Revision 2 boards
             self.bus.write_byte_data(0x68, 0x6b, 0)
@@ -41,10 +42,13 @@ class AccelerometerThread(Thread):
                 rot_y = self.get_y_rotation(accel_x, accel_y, accel_z)
                 accelerometer_data = AccelerometerData(gyroscope_x=gyro_x, gyroscope_y=gyro_y, gyroscope_z=gyro_z,
                                                        accelerometer_x=accel_x, accelerometer_y=accel_y,
-                                                       accelerometer_z=accel_z, rotation_x=rot_x, rotation_y=rot_y)
+                                                       accelerometer_z=accel_z, rotation_x=rot_x, rotation_y=rot_y,
+                                                       datetime=datetime.now())
                 log.log("Insert: " + str(accelerometer_data), log.LEVEL_DEBUG)
                 self.db_session.add(accelerometer_data)
                 self.db_session.commit()
+
+                time.sleep(self.recording_interval)
 
         log.log("AccelerometerThread will be stopped !!", log.LEVEL_DEBUG)
 

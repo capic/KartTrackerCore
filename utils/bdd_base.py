@@ -119,6 +119,7 @@ class AccelerometerData(Base):
     accelerometer_z = Column(Float)
     rotation_x = Column(Float)
     rotation_y = Column(Float)
+    date_time = Column(String)
 
     session_id = Column(Integer, ForeignKey('session.id'))
 
@@ -127,7 +128,7 @@ class AccelerometerData(Base):
             self.gyroscope_y) + ', gyroscope_z: ' + str(self.gyroscope_z) + ', accelerometer_x: ' + str(
             self.accelerometer_x) + ', accelerometer_y: ' + str(self.accelerometer_y) + ', accelerometer_z: ' + str(
             self.accelerometer_z) + ', rotation_x: ' + str(self.rotation_x) + ', rotation_y: ' + str(
-            self.rotation_y) + '}'
+            self.rotation_y) + ', ' + str(self.date_time) + '}'
 
     def _from_json(self, json):
         self.id = json['id']
@@ -139,6 +140,7 @@ class AccelerometerData(Base):
         self.accelerometer_z = json['accelerometer_z']
         self.rotation_x = json['rotation_x']
         self.rotation_y = json['rotation_y']
+        self.date_time = json['date_time']
 
 
 # Base.query = db_session.query_property()

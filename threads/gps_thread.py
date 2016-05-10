@@ -8,10 +8,11 @@ from utils.functions import *
 
 
 class GpsThread(Thread):
-    def __init__(self, session_db):
+    def __init__(self, session_db, recording_interval):
         Thread.__init__(self)
         self.session = gps(mode=WATCH_ENABLE)
         self.db_session = session_db
+        self.recording_interval = recording_interval
         self.can_run = Event()
         self.stop_program = Event()
 
@@ -33,6 +34,8 @@ class GpsThread(Thread):
                     self.db_session.commit()
                 else:
                     log.log("No gps datas", log.LEVEL_DEBUG)
+
+                time.sleep(self.recording_interval)
         log.log("GpsThread will be stopped !!", log.LEVEL_DEBUG)
         self.session = None
 
