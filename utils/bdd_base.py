@@ -73,7 +73,7 @@ class Session(Base):
 
         for accelerometer_data_json in json['accelerometer_datas']:
             accelerometer_data = AccelerometerData()
-            accelerometer_data._from_json(accelerometer_data)
+            accelerometer_data._from_json(accelerometer_data_json)
             self.accelerometer_datas.append(accelerometer_data)
 
 
