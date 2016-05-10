@@ -29,8 +29,8 @@ class GpsThread(Thread):
 
             while not self.stop_program.isSet() and self.can_run.isSet():
                 # get the gps datas
-                if self.session.waiting():
-                    datas = self.session.next()
+                # if self.session.waiting():
+                datas = self.session.next()
 
                 if datas['class'] == "TPV":
                     # create gps datas and insert it
