@@ -59,7 +59,7 @@ def send_to_central_database():
     ret = db_session.query(Session).all()
     log.log("Number of session to send: %d" % len(ret), log.LEVEL_DEBUG)
     if len(ret) > 0:
-        json_sessions = json.dumps(ret, cls=new_alchemy_encoder(False, ['gps_datas', 'accelerometer_data']),
+        json_sessions = json.dumps(ret, cls=new_alchemy_encoder(False, ['gps_datas', 'accelerometer_datas']),
                                    check_circular=False)
         print(json_sessions)
         unirest.timeout(99999)
