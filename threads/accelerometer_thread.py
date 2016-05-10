@@ -13,7 +13,7 @@ class AccelerometerThread(Thread):
     POWER_MGMT_1 = 0x6b
     POWER_MGMT_2 = 0x6c
     ADDRESS = 0x68  # This is the address value read via the i2cdetect command
-    
+
     def __init__(self, session_db):
         Thread.__init__(self)
         self.db_session = session_db
@@ -33,7 +33,7 @@ class AccelerometerThread(Thread):
 
     def set_track_session_id(self, track_session_id):
         self.track_session_id = track_session_id
-            
+
     def run(self):
         while not self.stop_program.isSet():
             self.can_run.wait()
@@ -50,7 +50,8 @@ class AccelerometerThread(Thread):
                 accelerometer_data = AccelerometerData(gyroscope_x=gyro_x, gyroscope_y=gyro_y, gyroscope_z=gyro_z,
                                                        accelerometer_x=accel_x, accelerometer_y=accel_y,
                                                        accelerometer_z=accel_z, rotation_x=rot_x, rotation_y=rot_y,
-                                                       date_time=datetime.now(), session_id=self.track_session_id)
+                                                       date_time=time.strftime('%Y-%m-%d %H:%M:%f', 'now'),
+                                                       session_id=self.track_session_id)
                 log.log("Insert: " + str(accelerometer_data), log.LEVEL_DEBUG)
                 self.db_session.add(accelerometer_data)
                 self.db_session.commit()
@@ -71,7 +72,7 @@ class AccelerometerThread(Thread):
         log.log("AccelerometerThread stopping ....", log.LEVEL_DEBUG)
         self.stop_program.set()
         self.resume()
-        
+
     def read_byte(self, adr):
         return self.bus.read_byte_data(self.ADDRESS, adr)
 
@@ -80,21 +81,21 @@ class AccelerometerThread(Thread):
         low = self.bus.read_byte_data(self.ADDRESS, adr + 1)
         val = (high << 8) + low
         return val
-    
+
     def read_word_2c(self, adr):
         val = self.read_word(adr)
         if val >= 0x8000:
             return -((65535 - val) + 1)
         else:
             return val
-    
+
     def dist(self, a, b):
         return math.sqrt((a * a) + (b * b))
-    
+
     def get_y_rotation(self, x, y, z):
         radians = math.atan2(x, self.dist(y, z))
         return -math.degrees(radians)
-    
+
     def get_x_rotation(self, x, y, z):
         radians = math.atan2(y, self.dist(x, z))
         return math.degrees(radians)

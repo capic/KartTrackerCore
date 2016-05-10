@@ -36,7 +36,7 @@ class GpsThread(Thread):
                 if datas['class'] == "TPV":
                     # create gps datas and insert it
                     gps_data = GPSData(latitude=session.fix.latitude, longitude=session.fix.longitude,
-                                       speed=session.fix.speed, date_time=datetime.now(),
+                                       speed=session.fix.speed, date_time=time.strftime('%Y-%m-%d %H:%M:%f', 'now'),
                                        session_id=self.track_session_id)
                     log.log("Insert: " + str(gps_data), log.LEVEL_DEBUG)
                     self.db_session.add(gps_data)
