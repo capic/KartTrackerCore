@@ -67,6 +67,13 @@ def init_config():
         print("config file not found")
 
 
+def clean_end_program(led_thread):
+    led_thread.stop()
+    led_thread.join()
+    led_thread.turn_off()
+    log.log("Cleanup program", log.LEVEL_INFO)
+    GPIO.cleanup()
+
 def main(argv):
     try:
         opts, args = getopt.getopt(argv, "udsp:", ["upload", "download", "synchronize", "database-path"])
@@ -205,13 +212,9 @@ def main(argv):
             accelerometer_thread.stop()
             gps_thread.join()
             accelerometer_thread.join()
-            raise
-
-    led_thread.stop()
-    led_thread.join()
-    led_thread.turn_off()
-    log.log("Cleanup program", log.LEVEL_INFO)
-    GPIO.cleanup()
+            clean_end_program(led_thread)
+    else:
+        clean_end_program(led_thread)
 
 
 if __name__ == "__main__":
