@@ -208,9 +208,8 @@ def main(argv):
             led_thread.stop()
             led_thread.join()
             led_thread.turn_off()
-
-    log.log("Cleanup program", log.LEVEL_INFO)
-    GPIO.cleanup()
+            log.log("Cleanup program", log.LEVEL_INFO)
+            GPIO.cleanup()
 
 
 if __name__ == "__main__":
