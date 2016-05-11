@@ -205,11 +205,13 @@ def main(argv):
             accelerometer_thread.stop()
             gps_thread.join()
             accelerometer_thread.join()
-            led_thread.stop()
-            led_thread.join()
-            led_thread.turn_off()
-            log.log("Cleanup program", log.LEVEL_INFO)
-            GPIO.cleanup()
+            raise
+
+    led_thread.stop()
+    led_thread.join()
+    led_thread.turn_off()
+    log.log("Cleanup program", log.LEVEL_INFO)
+    GPIO.cleanup()
 
 
 if __name__ == "__main__":
