@@ -191,6 +191,7 @@ def main(argv):
                         led_thread.pause()
                         led_thread.set_type_blink_error()
                         led_thread.resume()
+                        time.sleep(2)
                     finally:
                         end_track_session(track_session)
                         raise
@@ -203,6 +204,7 @@ def main(argv):
             led_thread.pause()
             led_thread.set_type_blink_error()
             led_thread.resume()
+            time.sleep(2)
             gps_thread.stop()
             accelerometer_thread.stop()
             gps_thread.join()
