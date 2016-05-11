@@ -87,7 +87,7 @@ class GPSData(Base):
     latitude = Column(Float)
     longitude = Column(Float)
     speed = Column(Float)
-    date_time = Column(String)
+    date_time = Column(String, default=func.strftime('%Y-%m-%d %H:%M:%f', 'now'))
 
     session_id = Column(Integer, ForeignKey('session.id'))
 
@@ -119,7 +119,7 @@ class AccelerometerData(Base):
     accelerometer_z = Column(Float)
     rotation_x = Column(Float)
     rotation_y = Column(Float)
-    date_time = Column(String)
+    date_time = Column(String, default=func.strftime('%Y-%m-%d %H:%M:%f', 'now'))
 
     session_id = Column(Integer, ForeignKey('session.id'))
 
