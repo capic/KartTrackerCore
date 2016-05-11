@@ -74,6 +74,7 @@ def clean_end_program(led_thread):
     log.log("Cleanup program", log.LEVEL_INFO)
     GPIO.cleanup()
 
+
 def main(argv):
     try:
         opts, args = getopt.getopt(argv, "udsp:", ["upload", "download", "synchronize", "database-path"])

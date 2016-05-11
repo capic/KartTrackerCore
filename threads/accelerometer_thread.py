@@ -10,9 +10,9 @@ from utils.functions import *
 
 class AccelerometerThread(Thread):
     # Power management registers
-    POWER_MGMT_1 = 0x6b
-    POWER_MGMT_2 = 0x6c
-    ADDRESS = 0x68  # This is the address value read via the i2cdetect command
+    # POWER_MGMT_1 = 0x6b
+    # POWER_MGMT_2 = 0x6c
+    # ADDRESS = 0x68  # This is the address value read via the i2cdetect command
 
     def __init__(self, session_db):
         Thread.__init__(self)
