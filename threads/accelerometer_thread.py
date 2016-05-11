@@ -58,7 +58,7 @@ class AccelerometerThread(Thread):
 
                 time.sleep(self.recording_interval)
 
-        log.log("AccelerometerThread will be stopped !!", log.LEVEL_DEBUG)
+        log.log("AccelerometerThread stopped !!", log.LEVEL_DEBUG)
 
     def pause(self):
         log.log("AccelerometerThread pausing ....", log.LEVEL_DEBUG)

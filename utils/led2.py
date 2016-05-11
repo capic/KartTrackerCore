@@ -25,7 +25,7 @@ class Led(Thread):
                 GPIO.output(self._GPIOPORT, True)
                 time.sleep(self.delay_on)
 
-        log.log("Blink thread finished", log.LEVEL_DEBUG)
+        log.log("Blink thread stopped", log.LEVEL_DEBUG)
 
     def resume(self):
         log.log("Led thread resuming", log.LEVEL_DEBUG)

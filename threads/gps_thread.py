@@ -45,7 +45,7 @@ class GpsThread(Thread):
 
                 time.sleep(self.recording_interval)
 
-        log.log("GpsThread will be stopped !!", log.LEVEL_DEBUG)
+        log.log("GpsThread stopped !!", log.LEVEL_DEBUG)
         session = None
 
     def pause(self):
