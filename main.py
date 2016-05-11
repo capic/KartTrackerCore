@@ -190,6 +190,7 @@ def main(argv):
 
                         end_track_session(track_session)
                     except Exception:
+                        log.log("Exception in the program execution", log.LEVEL_ERROR)
                         led_thread.pause()
                         led_thread.set_type_blink_error()
                         led_thread.resume()
