@@ -187,12 +187,12 @@ def main(argv):
                         led_thread.pause()
                         led_thread.turn_on()
                         time.sleep(.5)
-
-                        end_track_session(track_session)
                     except Exception:
                         led_thread.pause()
                         led_thread.set_type_blink_error()
                         led_thread.resume()
+                    finally:
+                        end_track_session(track_session)
                         raise
         except KeyError:
             log.log("Stop by the user", log.LEVEL_ERROR)
@@ -200,6 +200,9 @@ def main(argv):
             log.log("GPSD is stopped", log.LEVEL_ERROR)
         finally:
             log.log("Finally execution ---", log.LEVEL_DEBUG)
+            led_thread.pause()
+            led_thread.set_type_blink_error()
+            led_thread.resume()
             gps_thread.stop()
             accelerometer_thread.stop()
             gps_thread.join()
