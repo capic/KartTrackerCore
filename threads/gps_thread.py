@@ -26,7 +26,6 @@ class GpsThread(Thread):
     def run(self):
         session = gps(mode=WATCH_ENABLE)
         self.condition.acquire()
-        self.condition.release()
 
         while not self.stop_program.isSet():
             self.can_run.wait()
