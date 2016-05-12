@@ -36,6 +36,7 @@ class AccelerometerThread(Thread):
         self.track_session_id = track_session_id
 
     def run(self):
+        self.condition.acquire()
         while not self.stop_program.isSet():
             self.can_run.wait()
 
