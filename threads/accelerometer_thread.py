@@ -59,6 +59,7 @@ class AccelerometerThread(Thread):
                 log.log("Insert: " + str(accelerometer_data), log.LEVEL_DEBUG)
                 self.db_session.add(accelerometer_data)
                 self.db_session.commit()
+                self.event.clear()
 
                 time.sleep(self.recording_interval)
 

@@ -45,7 +45,6 @@ class GpsThread(Thread):
                     log.log("Insert: " + str(gps_data), log.LEVEL_DEBUG)
                     self.db_session.add(gps_data)
                     self.db_session.commit()
-                    self.event.clear()
 
                 time.sleep(self.recording_interval)
 
