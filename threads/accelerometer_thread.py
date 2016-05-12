@@ -14,14 +14,14 @@ class AccelerometerThread(Thread):
     POWER_MGMT_2 = 0x6c
     ADDRESS = 0x68  # This is the address value read via the i2cdetect command
 
-    def __init__(self, session_db, condition):
+    def __init__(self, session_db, event):
         Thread.__init__(self)
         self.db_session = session_db
         self.can_run = Event()
         self.stop_program = Event()
         self.recording_interval = 0
         self.track_session_id = 0
-        self.condition = condition
+        self.event = event
         try:
             self.bus = smbus.SMBus(1)  # or bus = smbus.SMBus(1) for Revision 2 boards
             self.bus.write_byte_data(self.ADDRESS, self.POWER_MGMT_1, 0)
@@ -36,12 +36,11 @@ class AccelerometerThread(Thread):
         self.track_session_id = track_session_id
 
     def run(self):
-        self.condition.acquire()
         while not self.stop_program.isSet():
             self.can_run.wait()
 
             while not self.stop_program.isSet() and self.can_run.isSet():
-                self.condition.wait()
+                self.event.wait()
                 gyro_x = (self.read_word_2c(0x43) / 131)
                 gyro_y = (self.read_word_2c(0x45) / 131)
                 gyro_z = (self.read_word_2c(0x47) / 131)

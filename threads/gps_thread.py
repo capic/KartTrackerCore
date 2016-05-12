@@ -8,14 +8,14 @@ from utils.functions import *
 
 
 class GpsThread(Thread):
-    def __init__(self, session_db, condition):
+    def __init__(self, session_db, event):
         Thread.__init__(self)
         self.db_session = session_db
         self.recording_interval = 0
         self.track_session_id = 0
         self.can_run = Event()
         self.stop_program = Event()
-        self.condition = condition
+        self.event = event
 
     def set_recording_inteval(self, recording_interval):
         self.recording_interval = recording_interval
@@ -25,7 +25,6 @@ class GpsThread(Thread):
 
     def run(self):
         session = gps(mode=WATCH_ENABLE)
-        self.condition.acquire()
 
         while not self.stop_program.isSet():
             self.can_run.wait()
@@ -36,7 +35,7 @@ class GpsThread(Thread):
                     datas = session.next()
 
                 if datas['class'] == "TPV":
-                    self.condition.notify()
+                    self.event.set()
                     # create gps datas and insert it
                     gps_data = GPSData(latitude=session.fix.latitude, longitude=session.fix.longitude,
                                        speed=session.fix.speed,
@@ -45,6 +44,7 @@ class GpsThread(Thread):
                     log.log("Insert: " + str(gps_data), log.LEVEL_DEBUG)
                     self.db_session.add(gps_data)
                     self.db_session.commit()
+                    self.event.clear()
 
                 time.sleep(self.recording_interval)
 
