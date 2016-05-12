@@ -41,6 +41,7 @@ class AccelerometerThread(Thread):
             self.can_run.wait()
 
             while not self.stop_program.isSet() and self.can_run.isSet():
+                self.condition.wait()
                 gyro_x = (self.read_word_2c(0x43) / 131)
                 gyro_y = (self.read_word_2c(0x45) / 131)
                 gyro_z = (self.read_word_2c(0x47) / 131)

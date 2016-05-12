@@ -37,6 +37,7 @@ class GpsThread(Thread):
                     datas = session.next()
 
                 if datas['class'] == "TPV":
+                    self.condition.notify()
                     # create gps datas and insert it
                     gps_data = GPSData(latitude=session.fix.latitude, longitude=session.fix.longitude,
                                        speed=session.fix.speed,
