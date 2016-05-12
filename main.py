@@ -7,13 +7,16 @@ from utils.functions import *
 import os
 from utils.led2 import Led
 from time import sleep
-from threads.gps_thread import GpsThread
-from threads.accelerometer_thread import AccelerometerThread
 from threading import Event
+import smbus
+import math
 
-event = Event()
-gps_thread = GpsThread(db_session, event)
-accelerometer_thread = AccelerometerThread(db_session, event)
+
+POWER_MGMT_1 = 0x6b
+POWER_MGMT_2 = 0x6c
+ADDRESS = 0x68  # This is the address value read via the i2cdetect command
+bus = smbus.SMBus(1)  # or bus = smbus.SMBus(1) for Revision 2 boards
+bus.write_byte_data(ADDRESS, POWER_MGMT_1, 0)
 
 
 def init_gpio():
@@ -39,7 +42,8 @@ def init_config():
             config.REST_ADRESSE = config_object['rest_adresse']
         if 'log_output' in config_object:
             config.LOG_OUTPUT = (
-                config_object['log_output'] == "True" or config_object['log_output'] == "true" or config_object['log_output'] == "1")
+                config_object['log_output'] == "True" or config_object['log_output'] == "true" or config_object[
+                    'log_output'] == "1")
         if 'console_output' in config_object:
             config.CONSOLE_OUTPUT = (
                 config_object['console_output'] == "True" or config_object['console_output'] == "true" or config_object[
@@ -75,6 +79,39 @@ def clean_end_program(led_thread):
     led_thread.turn_off()
     log.log("Cleanup program", log.LEVEL_INFO)
     GPIO.cleanup()
+
+
+def read_byte(adr):
+    return bus.read_byte_data(ADDRESS, adr)
+
+
+def read_word(adr):
+    high = bus.read_byte_data(ADDRESS, adr)
+    low = bus.read_byte_data(ADDRESS, adr + 1)
+    val = (high << 8) + low
+    return val
+
+
+def read_word_2c(adr):
+    val = read_word(adr)
+    if val >= 0x8000:
+        return -((65535 - val) + 1)
+    else:
+        return val
+
+
+def dist(a, b):
+    return math.sqrt((a * a) + (b * b))
+
+
+def get_y_rotation(x, y, z):
+    radians = math.atan2(x, dist(y, z))
+    return -math.degrees(radians)
+
+
+def get_x_rotation(x, y, z):
+    radians = math.atan2(y, dist(x, z))
+    return math.degrees(radians)
 
 
 def main(argv):
@@ -153,17 +190,17 @@ def main(argv):
 
     if not stop_program:
         try:
-            gps_thread.start()
-            gps_thread.pause()
-            accelerometer_thread.start()
-            accelerometer_thread.pause()
             led_thread.set_type_blink()
 
             track_id = args[0]
             track = db_session.query(Track).filter(Track.id == track_id).one()
 
+            stop_recording = Event()
+            session = gps(mode=WATCH_ENABLE)
+
             # il faut pouvoir arreter le programme depuis l'interface
             while not stop_program:
+                stop_recording.clear()
                 print("Push button to start recording or long press to quit")
                 GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
                 sleep(0.5)
@@ -181,16 +218,45 @@ def main(argv):
                     try:
                         # create new session and insert it
                         track_session = start_track_session(track.id)
-                        gps_thread.set_recording_inteval(config.RECORDING_INTERVAL)
-                        accelerometer_thread.set_recording_inteval(config.RECORDING_INTERVAL)
-                        gps_thread.set_track_session_id(track_session.id)
-                        accelerometer_thread.set_track_session_id(track_session.id)
-
-                        gps_thread.resume()
-                        accelerometer_thread.resume()
                         GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
-                        gps_thread.pause()
-                        accelerometer_thread.pause()
+
+                        while not stop_recording.isSet():
+                            # get the gps datas
+                            if session.waiting():
+                                datas = session.next()
+
+                            if datas['class'] == "TPV":
+                                date_time = func.strftime('%Y-%m-%d %H:%M:%f', datetime.now())
+                                # create gps datas and insert it
+                                gps_data = GPSData(latitude=session.fix.latitude, longitude=session.fix.longitude,
+                                                   speed=session.fix.speed,
+                                                   date_time=date_time,
+                                                   session_id=track_session.id)
+                                log.log("Insert: " + str(gps_data), log.LEVEL_DEBUG)
+                                db_session.add(gps_data)
+                                # db_session.commit()
+
+                                gyro_x = (read_word_2c(0x43) / 131)
+                                gyro_y = (read_word_2c(0x45) / 131)
+                                gyro_z = (read_word_2c(0x47) / 131)
+                                accel_x = (read_word_2c(0x3b) / 16384.0)
+                                accel_y = (read_word_2c(0x3d) / 16384.0)
+                                accel_z = (read_word_2c(0x3f) / 16384.0)
+                                rot_x = get_x_rotation(accel_x, accel_y, accel_z)
+                                rot_y = get_y_rotation(accel_x, accel_y, accel_z)
+                                accelerometer_data = AccelerometerData(gyroscope_x=gyro_x, gyroscope_y=gyro_y,
+                                                                       gyroscope_z=gyro_z,
+                                                                       accelerometer_x=accel_x, accelerometer_y=accel_y,
+                                                                       accelerometer_z=accel_z, rotation_x=rot_x,
+                                                                       rotation_y=rot_y,
+                                                                       date_time=date_time,
+                                                                       session_id=track_session.id)
+                                log.log("Insert: " + str(accelerometer_data), log.LEVEL_DEBUG)
+                                db_session.add(accelerometer_data)
+                                db_session.commit()
+
+                            if GPIO.event_detected(config.PIN_NUMBER_BUTTON):
+                                stop_recording.set()
 
                         # GPIO.remove_event_detect(config.PIN_NUMBER_BUTTON)
                         log.log("Stop blinking ...", log.LEVEL_DEBUG)
@@ -211,10 +277,6 @@ def main(argv):
             log.log("GPSD is stopped", log.LEVEL_ERROR)
         finally:
             log.log("Finally execution ---", log.LEVEL_DEBUG)
-            gps_thread.stop()
-            accelerometer_thread.stop()
-            gps_thread.join()
-            accelerometer_thread.join()
             clean_end_program(led_thread)
     else:
         clean_end_program(led_thread)
