@@ -231,9 +231,6 @@ def main(argv):
                                                    speed=session.fix.speed,
                                                    date_time=date_time,
                                                    session_id=track_session.id)
-                                log.log("Insert: " + str(gps_data), log.LEVEL_DEBUG)
-                                db_session.add(gps_data)
-                                # db_session.commit()
 
                                 gyro_x = (read_word_2c(0x43) / 131)
                                 gyro_y = (read_word_2c(0x45) / 131)
@@ -250,6 +247,10 @@ def main(argv):
                                                                        rotation_y=rot_y,
                                                                        date_time=date_time,
                                                                        session_id=track_session.id)
+
+                                log.log("Insert: " + str(gps_data), log.LEVEL_DEBUG)
+                                db_session.add(gps_data)
+                                # db_session.commit()
                                 log.log("Insert: " + str(accelerometer_data), log.LEVEL_DEBUG)
                                 db_session.add(accelerometer_data)
                                 db_session.commit()
