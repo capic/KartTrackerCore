@@ -217,7 +217,7 @@ def main(argv):
                     try:
                         # create new session and insert it
                         track_session = start_track_session(track.id)
-                        # GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
+                        GPIO.add_event_detect(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
 
                         while not stop_recording:
                             # get the gps datas
@@ -255,9 +255,10 @@ def main(argv):
                                 db_session.commit()
 
                             if GPIO.event_detected(config.PIN_NUMBER_BUTTON):
+                                log.log("Event detected stop recording !!!", log.LEVEL_DEBUG)
                                 stop_recording = True
 
-                        # GPIO.remove_event_detect(config.PIN_NUMBER_BUTTON)
+                        GPIO.remove_event_detect(config.PIN_NUMBER_BUTTON)
                         log.log("Stop blinking ...", log.LEVEL_DEBUG)
                         led_thread.pause()
                         led_thread.turn_on()
