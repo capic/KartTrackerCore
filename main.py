@@ -195,12 +195,11 @@ def main(argv):
             track_id = args[0]
             track = db_session.query(Track).filter(Track.id == track_id).one()
 
-            stop_recording = Event()
             session = gps(mode=WATCH_ENABLE)
 
             # il faut pouvoir arreter le programme depuis l'interface
             while not stop_program:
-                stop_recording.clear()
+                stop_recording = False
                 print("Push button to start recording or long press to quit")
                 GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
                 sleep(0.5)
@@ -220,7 +219,7 @@ def main(argv):
                         track_session = start_track_session(track.id)
                         # GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
 
-                        while not stop_recording.isSet():
+                        while not stop_recording:
                             # get the gps datas
                             if session.waiting():
                                 datas = session.next()
@@ -256,7 +255,7 @@ def main(argv):
                                 db_session.commit()
 
                             if GPIO.event_detected(config.PIN_NUMBER_BUTTON):
-                                stop_recording.set()
+                                stop_recording = True
 
                         # GPIO.remove_event_detect(config.PIN_NUMBER_BUTTON)
                         log.log("Stop blinking ...", log.LEVEL_DEBUG)
