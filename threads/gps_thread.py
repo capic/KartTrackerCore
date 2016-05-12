@@ -1,5 +1,6 @@
 __author__ = 'Vincent'
 
+from sqlalchemy import *
 from threading import Thread
 from threading import Event
 from gps import *
@@ -39,7 +40,7 @@ class GpsThread(Thread):
                     # create gps datas and insert it
                     gps_data = GPSData(latitude=session.fix.latitude, longitude=session.fix.longitude,
                                        speed=session.fix.speed,
-                                       date_time=db_session.func.strftime('%Y-%m-%d %H:%M:%f', datetime.now()),
+                                       date_time=func.strftime('%Y-%m-%d %H:%M:%f', datetime.now()),
                                        session_id=self.track_session_id)
                     log.log("Insert: " + str(gps_data), log.LEVEL_DEBUG)
                     self.db_session.add(gps_data)
