@@ -9,9 +9,11 @@ from utils.led2 import Led
 from time import sleep
 from threads.gps_thread import GpsThread
 from threads.accelerometer_thread import AccelerometerThread
+from threading import Condition
 
-gps_thread = GpsThread(db_session)
-accelerometer_thread = AccelerometerThread(db_session)
+condition = Condition()
+gps_thread = GpsThread(db_session, condition)
+accelerometer_thread = AccelerometerThread(db_session, condition)
 
 
 def init_gpio():

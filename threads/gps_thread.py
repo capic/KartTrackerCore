@@ -8,13 +8,14 @@ from utils.functions import *
 
 
 class GpsThread(Thread):
-    def __init__(self, session_db):
+    def __init__(self, session_db, condition):
         Thread.__init__(self)
         self.db_session = session_db
         self.recording_interval = 0
         self.track_session_id = 0
         self.can_run = Event()
         self.stop_program = Event()
+        self.condition = condition
 
     def set_recording_inteval(self, recording_interval):
         self.recording_interval = recording_interval
@@ -24,6 +25,7 @@ class GpsThread(Thread):
 
     def run(self):
         session = gps(mode=WATCH_ENABLE)
+        self.condition.acquire()
 
         while not self.stop_program.isSet():
             self.can_run.wait()
