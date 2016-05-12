@@ -218,7 +218,7 @@ def main(argv):
                     try:
                         # create new session and insert it
                         track_session = start_track_session(track.id)
-                        GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
+                        # GPIO.wait_for_edge(config.PIN_NUMBER_BUTTON, GPIO.FALLING)
 
                         while not stop_recording.isSet():
                             # get the gps datas
