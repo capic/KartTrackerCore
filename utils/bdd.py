@@ -71,7 +71,9 @@ def send_to_central_database():
                                     params=param)
 
             if response.code == 200:
+                log.log("Session inserted successfully", log.LEVEL_INFO)
                 ret_gps = db_session.query(GPSData).filter(GPSData.session_id == session.id)
+                log.log("==> Number of gps datas to send: %d" % len(ret_gps), log.LEVEL_INFO)
                 i = 0
                 error = False
                 while i < len(ret_gps) and not error:
