@@ -59,7 +59,7 @@ def send_to_central_database():
 
     log.log("[=== Sessions treatment ===]", log.LEVEL_INFO)
     # get only the ids
-    ret = db_session.query(Session)
+    ret = db_session.query(Session).all()
     log.log("==> Number of session to send: %d" % len(ret), log.LEVEL_INFO)
     if len(ret) > 0:
         for session in ret:
@@ -72,13 +72,11 @@ def send_to_central_database():
 
             if response.code == 200:
                 log.log("Session inserted successfully", log.LEVEL_INFO)
-                ret_gps = db_session.query(GPSData).filter(GPSData.session_id == session.id)
-                log.log("ret_gps %s" % ret_gps, log.LEVEL_INFO)
-                log.log("==> Number of gps datas to send: %d" % len(ret_gps), log.LEVEL_INFO)
+                log.log("==> Number of gps datas to send: %d" % len(session.gps_datas), log.LEVEL_INFO)
                 i = 0
                 error = False
-                while i < len(ret_gps) and not error:
-                    gps_data = ret_gps[i]
+                while i < len(session.gps_datas) and not error:
+                    gps_data = session.gps_datas[i]
                     json_gps_data = json.dumps(gps_data, cls=new_alchemy_encoder(False, []), check_circular=False)
                     param = {"datas": json_gps_data}
                     log.log("====> Insert gps data: %d" % gps_data.id, log.LEVEL_INFO)
@@ -92,11 +90,9 @@ def send_to_central_database():
                     i += 1
 
                 if not error:
-                    ret_accelerometer = db_session.query(AccelerometerData).ilter(
-                        AccelerometerData.session_id == session.id)
                     i = 0
-                    while i < len(ret_accelerometer) and not error:
-                        accelerometer_data = ret_accelerometer[i]
+                    while i < len(session.accelerometer_datas) and not error:
+                        accelerometer_data = session.accelerometer_datas[i]
                         json_accelerometer_data = json.dumps(accelerometer_data, cls=new_alchemy_encoder(False, []), check_circular=False)
                         param = {"datas": json_accelerometer_data}
                         log.log("====> Insert accelerometer data: %d" % accelerometer_data.id, log.LEVEL_INFO)
