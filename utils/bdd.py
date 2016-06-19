@@ -60,12 +60,13 @@ def send_to_central_database():
     log.log("[=== Sessions treatment ===]", log.LEVEL_INFO)
     # get only the ids
     ret = db_session.query(Session).all()
-    log.log("==> Number of session to send: %d" % len(ret), log.LEVEL_DEBUG)
+    log.log("==> Number of session to send: %d" % len(ret), log.LEVEL_INFO)
     if len(ret) > 0:
         for session in ret:
             json_sessions_only = json.dumps(session)
+            log.log("Session: %s" % json_sessions_only, log.LEVEL_DEBUG)
             param = {"datas": json_sessions_only}
-            log.log("===> Insert session: %d" % session.id, log.LEVEL_DEBUG)
+            log.log("===> Insert session: %d" % session.id, log.LEVEL_INFO)
             response = unirest.post(config.REST_ADDRESS + 'sessions', headers={"Accept": "application/json"},
                                     params=param)
 
@@ -77,7 +78,7 @@ def send_to_central_database():
                     gps_data = ret_gps[i]
                     json_gps_data = json.dumps(gps_data)
                     param = {"datas": json_gps_data}
-                    log.log("====> Insert gps data: %d" % gps_data.id, log.LEVEL_DEBUG)
+                    log.log("====> Insert gps data: %d" % gps_data.id, log.LEVEL_INFO)
                     response = unirest.post(config.REST_ADDRESS + 'gpsdatas', headers={"Accept": "application/json"},
                                             params=param)
 
@@ -95,7 +96,7 @@ def send_to_central_database():
                         accelerometer_data = ret_accelerometer[i]
                         json_accelerometer_data = json.dumps(accelerometer_data)
                         param = {"datas": json_accelerometer_data}
-                        log.log("====> Insert accelerometer data: %d" % accelerometer_data.id, log.LEVEL_DEBUG)
+                        log.log("====> Insert accelerometer data: %d" % accelerometer_data.id, log.LEVEL_INFO)
                         response = unirest.post(config.REST_ADDRESS + 'accelerometerdatas',
                                                 headers={"Accept": "application/json"},
                                                 params=param)
