@@ -72,12 +72,8 @@ def send_to_central_database():
 
             if response.code == 200:
                 log.log("Session inserted successfully", log.LEVEL_INFO)
-                try:
-                    ret_gps = db_session.query(GPSData).filter(GPSData.session_id == session.id)
-                except Exception:
-                    import traceback
-                    print(traceback.format_exc().splitlines()[-1])
-                    print(traceback.format_exc())
+                ret_gps = db_session.query(GPSData).filter(GPSData.session_id == session.id)
+                log.log("Aprèsssssssssss", log.LEVEL_INFO)
                 log.log("==> Number of gps datas to send: %d" % len(ret_gps), log.LEVEL_INFO)
                 i = 0
                 error = False
