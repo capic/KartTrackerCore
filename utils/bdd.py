@@ -63,7 +63,6 @@ def send_to_central_database():
     log.log("==> Number of session to send: %d" % len(ret), log.LEVEL_INFO)
     if len(ret) > 0:
         for session in ret:
-            log.log("Session: %s" % session, log.LEVEL_DEBUG)
             json_sessions_only = json.dumps(session, cls=new_alchemy_encoder(False, []), check_circular=False)
             param = {"datas": json_sessions_only}
             log.log("===> Insert session: %d" % session.id, log.LEVEL_INFO)
@@ -86,6 +85,8 @@ def send_to_central_database():
                     if response.code != 200:
                         log.log("!!! Error insertion !!!", log.LEVEL_ERROR)
                         error = True
+                    else:
+                        log.log("GPS datas inserted successfully", log.LEVEL_INFO)
 
                     i += 1
 
@@ -103,6 +104,8 @@ def send_to_central_database():
                         if response.code != 200:
                             log.log("!!! Error insertion !!!", log.LEVEL_ERROR)
                             error = True
+                        else:
+                            log.log("Accelerometer datas inserted successfully", log.LEVEL_INFO)
 
                         i += 1
 
@@ -111,6 +114,7 @@ def send_to_central_database():
                     unirest.delete(config.REST_ADDRESS + 'session/' + session.id,
                                                 headers={"Accept": "application/json"})
                 else:
+                    log.log("Delete session", log.LEVEL_INFO)
                     db_session.delete(session)
                     db_session.commit()
     else:
