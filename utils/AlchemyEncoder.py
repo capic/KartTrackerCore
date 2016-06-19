@@ -4,7 +4,7 @@ import json
 import utils.log as log
 
 
-def new_alchemy_encoder(revisit_self=False, fields_to_expand=[], nested_object=True):
+def new_alchemy_encoder(revisit_self=False, fields_to_expand=[]):
     _visited_objs = []
 
     class AlchemyEncoder(json.JSONEncoder):
@@ -29,12 +29,11 @@ def new_alchemy_encoder(revisit_self=False, fields_to_expand=[], nested_object=T
                         if field not in fields_to_expand:
                             log.log("Field: %s not in fields to expand, want nested object ? %s" % (field, nested_object))
                             # not expanding this field: set it to None and continue
-                            if nested_object:
-                                fields[field] = None
+                            fields[field] = None
                             continue
 
                     # fields[field] = val
-                    log.log("Field: %s | val %s isoformat: %s" % (field, val, val.isoformat() if hasattr(val, 'isoformat') else ""), log.LEVEL_DEBUG)
+                    # log.log("Field: %s | val %s isoformat: %s" % (field, val, val.isoformat() if hasattr(val, 'isoformat') else ""), log.LEVEL_DEBUG)
                     fields[field] = val.isoformat() if hasattr(val, 'isoformat') else val
                 # a json-encodable dict
                 return fields
