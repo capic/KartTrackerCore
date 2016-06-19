@@ -19,10 +19,13 @@ def new_alchemy_encoder(revisit_self=False, fields_to_expand=[], nested_object=T
                 # go through each field in this SQLalchemy class
                 fields = {}
                 for field in [x for x in dir(obj) if not x.startswith('_') and x != 'metadata']:
+                    sql_alchemy_object = False
                     val = obj.__getattribute__(field)
 
                     # is this field another SQLalchemy object, or a list of SQLalchemy objects?
-                    if nested_object and isinstance(val.__class__, DeclarativeMeta) or (isinstance(val, list) and len(val) > 0 and isinstance(val[0].__class__, DeclarativeMeta)):
+                    if isinstance(val.__class__, DeclarativeMeta) or (
+                            isinstance(val, list) and len(val) > 0 and isinstance(val[0].__class__, DeclarativeMeta)):
+                        sql_alchemy_object = True
                         # unless we're expanding this field, stop here
                         if field not in fields_to_expand:
                             # not expanding this field: set it to None and continue
@@ -30,11 +33,12 @@ def new_alchemy_encoder(revisit_self=False, fields_to_expand=[], nested_object=T
                             continue
 
                     # fields[field] = val
-
                     # log.log("Field: %s | val %s isoformat: %s" % (field, val, val.isoformat() if hasattr(val, 'isoformat') else ""), log.LEVEL_DEBUG)
-                    fields[field] = val.isoformat() if hasattr(val, 'isoformat') else val
+                    if not sql_alchemy_object or (sql_alchemy_object and nested_object):
+                        fields[field] = val.isoformat() if hasattr(val, 'isoformat') else val
                 # a json-encodable dict
                 return fields
 
             return json.JSONEncoder.default(self, obj)
+
     return AlchemyEncoder
