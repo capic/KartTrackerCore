@@ -31,7 +31,7 @@ def new_alchemy_encoder(revisit_self=False, fields_to_expand=[], nested_object=T
                             # not expanding this field: set it to None and continue
                             if nested_object:
                                 fields[field] = None
-                            continue
+                                continue
 
                     # fields[field] = val
                     log.log("Field: %s | val %s isoformat: %s" % (field, val, val.isoformat() if hasattr(val, 'isoformat') else ""), log.LEVEL_DEBUG)
