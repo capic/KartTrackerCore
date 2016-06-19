@@ -64,7 +64,7 @@ def send_to_central_database():
     if len(ret) > 0:
         for session in ret:
             log.log("Session: %s" % session, log.LEVEL_DEBUG)
-            json_sessions_only = json.dumps(session, cls=new_alchemy_encoder(False, []), check_circular=False)
+            json_sessions_only = json.dumps(session, cls=new_alchemy_encoder(False, [], False), check_circular=False)
             log.log("Session json: %s" % json_sessions_only, log.LEVEL_DEBUG)
             param = {"datas": json_sessions_only}
             log.log("===> Insert session: %d" % session.id, log.LEVEL_INFO)
