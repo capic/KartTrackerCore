@@ -35,11 +35,11 @@ def update_from_central_database():
 def send_to_central_database():
     log.log("send_to_central_database", log.LEVEL_INFO)
 
-    log.log("Tracks treatment...", log.LEVEL_INFO)
+    log.log("[=== Tracks treatment ===]", log.LEVEL_INFO)
     ret = db_session.query(Track).filter(Track.new == True).all()
-    log.log("Numer of tracks to send: %d" % len(ret), log.LEVEL_DEBUG)
+    log.log("==> Number of tracks to send: %d" % len(ret), log.LEVEL_DEBUG)
     if len(ret) > 0:
-        json_tracks = json_dumps(ret, cls=new_alchemy_encoder(False, []), check_circular=False)
+        json_tracks = json.dumps(ret, cls=new_alchemy_encoder(False, []), check_circular=False)
         unirest.timeout(99999)
         param = {"datas": json_tracks}
         response = unirest.post(config.REST_ADDRESS + 'tracks/list', headers={"Accept": "application/json"},
@@ -54,28 +54,67 @@ def send_to_central_database():
                 track.new = False
                 db_session.update(track)
                 db_session.commit()
+    else:
+        log.log("No track to insert", log.LEVEL_INFO)
 
-    log.log("Sessions treatment...", log.LEVEL_INFO)
+    log.log("[=== Sessions treatment ===]", log.LEVEL_INFO)
+    # get only the ids
     ret = db_session.query(Session).all()
-    log.log("Number of session to send: %d" % len(ret), log.LEVEL_DEBUG)
+    log.log("==> Number of session to send: %d" % len(ret), log.LEVEL_DEBUG)
     if len(ret) > 0:
-        json_sessions = json.dumps(ret, cls=new_alchemy_encoder(False, ['gps_datas', 'accelerometer_datas']),
-                                   check_circular=False)
+        for session in ret:
+            json_sessions_only = json.dumps(session)
+            param = {"datas": json_sessions_only}
+            log.log("===> Insert session: %d" % session.id, log.LEVEL_DEBUG)
+            response = unirest.post(config.REST_ADDRESS + 'sessions', headers={"Accept": "application/json"},
+                                    params=param)
 
-        unirest.timeout(99999)
-        param = {"datas": json_sessions}
-        response = unirest.post(config.REST_ADDRESS + 'sessions/list', headers={"Accept": "application/json"},
-                                params=param)
+            if response.code == 200:
+                ret_gps = db_session.query(GPSData).filter(GPSData.session_id == session.id)
+                i = 0
+                error = False
+                while i < len(ret_gps) and not error:
+                    gps_data = ret_gps[i]
+                    json_gps_data = json.dumps(gps_data)
+                    param = {"datas": json_gps_data}
+                    log.log("====> Insert gps data: %d" % gps_data.id, log.LEVEL_DEBUG)
+                    response = unirest.post(config.REST_ADDRESS + 'gpsdatas', headers={"Accept": "application/json"},
+                                            params=param)
 
-        if response.code != 200:
-            log.log("Insertion error: %s" % response.body, log.LEVEL_ERROR)
-        else:
-            log.log("Delete sessions inserted", log.LEVEL_INFO)
-            for session in ret:
-                log.log("Delete session id: %d" % session.id, log.LEVEL_DEBUG)
-                print(session)
-                db_session.delete(session)
-                db_session.commit()
+                    if response.code != 200:
+                        log.log("!!! Error insertion !!!", log.LEVEL_ERROR)
+                        error = True
+
+                    i += 1
+
+                if not error:
+                    ret_accelerometer = db_session.query(AccelerometerData).ilter(
+                        AccelerometerData.session_id == session.id)
+                    i = 0
+                    while i < len(ret_accelerometer) and not error:
+                        accelerometer_data = ret_accelerometer[i]
+                        json_accelerometer_data = json.dumps(accelerometer_data)
+                        param = {"datas": json_accelerometer_data}
+                        log.log("====> Insert accelerometer data: %d" % accelerometer_data.id, log.LEVEL_DEBUG)
+                        response = unirest.post(config.REST_ADDRESS + 'accelerometerdatas',
+                                                headers={"Accept": "application/json"},
+                                                params=param)
+
+                        if response.code != 200:
+                            log.log("!!! Error insertion !!!", log.LEVEL_ERROR)
+                            error = True
+
+                        i += 1
+
+                if error:
+                    log.log("There are errors during sessions data insertion => delete session %d" % session.id, log.LEVEL_DEBUG)
+                    unirest.delete(config.REST_ADDRESS + 'session/' + session.id,
+                                                headers={"Accept": "application/json"})
+                else:
+                    db_session.delete(session)
+                    db_session.commit()
+    else:
+        log.log("No session to insert", log.LEVEL_INFO)
 
 
 def start_track_session(track_id):
