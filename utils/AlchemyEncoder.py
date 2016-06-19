@@ -26,6 +26,7 @@ def new_alchemy_encoder(revisit_self=False, fields_to_expand=[], nested_object=T
                             isinstance(val, list) and len(val) > 0 and isinstance(val[0].__class__, DeclarativeMeta)):
                         # unless we're expanding this field, stop here
                         if field not in fields_to_expand:
+                            log.log("Field: %s not in fields to expand, want nested objec ? %s" % (field, nested_object))
                             # not expanding this field: set it to None and continue
                             if nested_object:
                                 fields[field] = None
