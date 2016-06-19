@@ -35,6 +35,7 @@ def new_alchemy_encoder(revisit_self=False, fields_to_expand=[], nested_object=T
                     # fields[field] = val
                     log.log("Field: %s | val %s isoformat: %s" % (field, val, val.isoformat() if hasattr(val, 'isoformat') else ""), log.LEVEL_DEBUG)
                     if not sql_alchemy_object or (sql_alchemy_object and nested_object):
+                        log.log("DEDANNNNNNNNNNNNNNNNNS", log.LEVEL_DEBUG)
                         fields[field] = val.isoformat() if hasattr(val, 'isoformat') else val
                 # a json-encodable dict
                 return fields
