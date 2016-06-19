@@ -24,9 +24,10 @@ def new_alchemy_encoder(revisit_self=False, fields_to_expand=[], nested_object=T
                     # is this field another SQLalchemy object, or a list of SQLalchemy objects?
                     if isinstance(val.__class__, DeclarativeMeta) or (
                             isinstance(val, list) and len(val) > 0 and isinstance(val[0].__class__, DeclarativeMeta)):
+                        log.log("Field: %s is instance of SQLAlchemy" % field)
                         # unless we're expanding this field, stop here
                         if field not in fields_to_expand:
-                            log.log("Field: %s not in fields to expand, want nested objec ? %s" % (field, nested_object))
+                            log.log("Field: %s not in fields to expand, want nested object ? %s" % (field, nested_object))
                             # not expanding this field: set it to None and continue
                             if nested_object:
                                 fields[field] = None
