@@ -4,7 +4,7 @@ import json
 import utils.log as log
 
 
-def new_alchemy_encoder(revisit_self=False, fields_to_expand=[]):
+def new_alchemy_encoder(revisit_self=False, fields_to_expand=[], nested_object=True):
     _visited_objs = []
 
     class AlchemyEncoder(json.JSONEncoder):
@@ -22,7 +22,7 @@ def new_alchemy_encoder(revisit_self=False, fields_to_expand=[]):
                     val = obj.__getattribute__(field)
 
                     # is this field another SQLalchemy object, or a list of SQLalchemy objects?
-                    if isinstance(val.__class__, DeclarativeMeta) or (isinstance(val, list) and len(val) > 0 and isinstance(val[0].__class__, DeclarativeMeta)):
+                    if nested_object and isinstance(val.__class__, DeclarativeMeta) or (isinstance(val, list) and len(val) > 0 and isinstance(val[0].__class__, DeclarativeMeta)):
                         # unless we're expanding this field, stop here
                         if field not in fields_to_expand:
                             # not expanding this field: set it to None and continue
