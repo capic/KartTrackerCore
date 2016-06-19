@@ -63,8 +63,9 @@ def send_to_central_database():
     log.log("==> Number of session to send: %d" % len(ret), log.LEVEL_INFO)
     if len(ret) > 0:
         for session in ret:
+            log.log("Session: %s" % session, log.LEVEL_DEBUG)
             json_sessions_only = json.dumps(session)
-            log.log("Session: %s" % json_sessions_only, log.LEVEL_DEBUG)
+            log.log("Session json: %s" % json_sessions_only, log.LEVEL_DEBUG)
             param = {"datas": json_sessions_only}
             log.log("===> Insert session: %d" % session.id, log.LEVEL_INFO)
             response = unirest.post(config.REST_ADDRESS + 'sessions', headers={"Accept": "application/json"},
