@@ -59,7 +59,7 @@ def send_to_central_database():
 
     log.log("[=== Sessions treatment ===]", log.LEVEL_INFO)
     # get only the ids
-    ret = db_session.query(Session).all()
+    ret = db_session.query(Session)
     log.log("==> Number of session to send: %d" % len(ret), log.LEVEL_INFO)
     if len(ret) > 0:
         for session in ret:
@@ -72,7 +72,7 @@ def send_to_central_database():
 
             if response.code == 200:
                 log.log("Session inserted successfully", log.LEVEL_INFO)
-                ret_gps = db_session.query(GPSData).filter(GPSData.session_id == 7)
+                ret_gps = db_session.query(GPSData).filter(GPSData.session_id == session.id)
                 log.log("ret_gps %s" % ret_gps, log.LEVEL_INFO)
                 log.log("==> Number of gps datas to send: %d" % len(ret_gps), log.LEVEL_INFO)
                 i = 0
