@@ -29,8 +29,7 @@ def new_alchemy_encoder(revisit_self=False, fields_to_expand=[], nested_object=T
                         # unless we're expanding this field, stop here
                         if field not in fields_to_expand:
                             # not expanding this field: set it to None and continue
-                            if nested_object:
-                                fields[field] = None
+                            # fields[field] = None
                             continue
 
                     # fields[field] = val
