@@ -59,7 +59,7 @@ def send_to_central_database():
 
     log.log("[=== Sessions treatment ===]", log.LEVEL_INFO)
     ret = db_session.query(Session).all()
-    log.log("%s" % ret, log.LEVEL_DEBUG)
+    log.log("%s" % ret[0].gps_datas[0], log.LEVEL_DEBUG)
     log.log("==> Number of session to send: %d" % len(ret), log.LEVEL_INFO)
     if len(ret) > 0:
 
