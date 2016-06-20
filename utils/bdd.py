@@ -58,12 +58,13 @@ def send_to_central_database():
         log.log("No track to insert", log.LEVEL_INFO)
 
     log.log("[=== Sessions treatment ===]", log.LEVEL_INFO)
-    # get only the ids
     ret = db_session.query(Session).all()
     log.log("==> Number of session to send: %d" % len(ret), log.LEVEL_INFO)
     if len(ret) > 0:
+        log.log("%s" % ret[0].gps_data[0], log.LEVEL_debug)
         for session in ret:
             json_sessions_only = json.dumps(session, cls=new_alchemy_encoder(False, []), check_circular=False)
+            log.log("JSON session: %s" % json_sessions_only, log.LEVEL_debug)
             param = {"datas": json_sessions_only}
             log.log("===> Insert session: %d" % session.id, log.LEVEL_INFO)
             response = unirest.post(config.REST_ADDRESS + 'sessions', headers={"Accept": "application/json"},
@@ -77,6 +78,7 @@ def send_to_central_database():
                 while i < len(session.gps_datas) and not error:
                     gps_data = session.gps_datas[i]
                     json_gps_data = json.dumps(gps_data, cls=new_alchemy_encoder(False, []), check_circular=False)
+                    log.log("JSON session: %s" % json_gps_data, log.LEVEL_debug)
                     param = {"datas": json_gps_data}
                     log.log("====> Insert gps data: %d" % gps_data.id, log.LEVEL_INFO)
                     response = unirest.post(config.REST_ADDRESS + 'gpsdatas', headers={"Accept": "application/json"},
