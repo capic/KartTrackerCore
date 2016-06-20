@@ -114,7 +114,7 @@ def send_to_central_database():
 
                 if error:
                     log.log("There are errors during sessions data insertion => delete session %d" % session.id, log.LEVEL_DEBUG)
-                    unirest.delete(config.REST_ADDRESS + 'session/' + session.id,
+                    unirest.delete(config.REST_ADDRESS + 'sessions/' + session.id,
                                                 headers={"Accept": "application/json"})
                 else:
                     log.log("Delete session", log.LEVEL_INFO)
