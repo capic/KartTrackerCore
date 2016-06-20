@@ -59,9 +59,10 @@ def send_to_central_database():
 
     log.log("[=== Sessions treatment ===]", log.LEVEL_INFO)
     ret = db_session.query(Session).all()
+    log.log("%s" % ret[0].gps_data[0], log.LEVEL_debug)
     log.log("==> Number of session to send: %d" % len(ret), log.LEVEL_INFO)
     if len(ret) > 0:
-        log.log("%s" % ret[0].gps_data[0], log.LEVEL_debug)
+
         for session in ret:
             json_sessions_only = json.dumps(session, cls=new_alchemy_encoder(False, []), check_circular=False)
             log.log("JSON session: %s" % json_sessions_only, log.LEVEL_debug)
