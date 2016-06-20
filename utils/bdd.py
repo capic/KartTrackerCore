@@ -78,7 +78,7 @@ def send_to_central_database():
                     gps_data = session.gps_datas[i]
                     log.log("%s" % gps_data, log.LEVEL_DEBUG)
                     json_gps_data = json.dumps(gps_data, cls=new_alchemy_encoder(False, []), check_circular=False)
-                    log.log("JSON session: %s" % json_gps_data, log.LEVEL_debug)
+                    log.log("JSON gps datas: %s" % json_gps_data, log.LEVEL_DEBUG)
                     param = {"datas": json_gps_data}
                     log.log("====> Insert gps data: %d" % gps_data.id, log.LEVEL_INFO)
                     response = unirest.post(config.REST_ADDRESS + 'gpsdatas', headers={"Accept": "application/json"},
@@ -97,6 +97,7 @@ def send_to_central_database():
                     while i < len(session.accelerometer_datas) and not error:
                         accelerometer_data = session.accelerometer_datas[i]
                         json_accelerometer_data = json.dumps(accelerometer_data, cls=new_alchemy_encoder(False, []), check_circular=False)
+                        log.log("JSON accelerometer datas: %s" % json_accelerometer_data, log.LEVEL_DEBUG)
                         param = {"datas": json_accelerometer_data}
                         log.log("====> Insert accelerometer data: %d" % accelerometer_data.id, log.LEVEL_INFO)
                         response = unirest.post(config.REST_ADDRESS + 'accelerometerdatas',
