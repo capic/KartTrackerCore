@@ -59,13 +59,13 @@ def send_to_central_database():
 
     log.log("[=== Sessions treatment ===]", log.LEVEL_INFO)
     ret = db_session.query(Session).all()
-    log.log("%s" % ret, log.LEVEL_debug)
+    log.log("%s" % ret, log.LEVEL_DEBUG)
     log.log("==> Number of session to send: %d" % len(ret), log.LEVEL_INFO)
     if len(ret) > 0:
 
         for session in ret:
             json_sessions_only = json.dumps(session, cls=new_alchemy_encoder(False, []), check_circular=False)
-            log.log("JSON session: %s" % json_sessions_only, log.LEVEL_debug)
+            log.log("JSON session: %s" % json_sessions_only, log.LEVEL_DEBUG)
             param = {"datas": json_sessions_only}
             log.log("===> Insert session: %d" % session.id, log.LEVEL_INFO)
             response = unirest.post(config.REST_ADDRESS + 'sessions', headers={"Accept": "application/json"},
