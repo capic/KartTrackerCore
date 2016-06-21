@@ -225,7 +225,9 @@ def main(argv):
 
                         end_track_session(track_session)
                     except Exception:
-                        log.log("Exception in the program execution", log.LEVEL_ERROR)
+                        import traceback
+                        log.log("Exception in the program execution\r\n %s" % traceback.format_exc().splitlines()[-1], log.LEVEL_ERROR)
+                        log.log("Traceback: %s" % traceback.format_exc(), log.LEVEL_DEBUG)
                         led_thread.pause()
                         led_thread.set_type_blink_error()
                         led_thread.resume()
