@@ -64,7 +64,8 @@ def init_config():
         print("config file not found")
 
 
-def clean_end_program(led_thread):
+def clean_end_program(led_thread, connection):
+    connection.close()
     led_thread.stop()
     led_thread.join()
     led_thread.turn_off()
@@ -138,7 +139,7 @@ def main(argv):
 
     log.log("Starting ....", log.LEVEL_INFO)
 
-    engine.connect()
+    connection = engine.connect()
 
     if len(args) != 1:
         log.log("No track id chosen", log.LEVEL_ERROR)
@@ -208,10 +209,10 @@ def main(argv):
 
                                 log.log("Insert: " + str(gps_data), log.LEVEL_DEBUG)
                                 db_session.add(gps_data)
-                                # db_session.commit()
                                 log.log("Insert: " + str(accelerometer_data), log.LEVEL_DEBUG)
                                 db_session.add(accelerometer_data)
                                 db_session.commit()
+                                time.sleep(config.RECORDING_INTERVAL)
 
                             if GPIO.event_detected(config.PIN_NUMBER_BUTTON):
                                 log.log("Event detected stop recording !!!", log.LEVEL_DEBUG)
@@ -240,9 +241,9 @@ def main(argv):
             log.log("GPSD is stopped", log.LEVEL_ERROR)
         finally:
             log.log("Finally execution ---", log.LEVEL_DEBUG)
-            clean_end_program(led_thread)
+            clean_end_program(led_thread, connection)
     else:
-        clean_end_program(led_thread)
+        clean_end_program(led_thread, connection)
 
 
 if __name__ == "__main__":
