@@ -182,7 +182,7 @@ def main(argv):
                             if session.waiting():
                                 datas = session.next()
 
-                            if datas['class'] == "TPV":
+                            if datas['class'] == "TPV" and  session.fix.latitude is not None and session.fix.longitude is not None:
                                 date_time = func.strftime('%Y-%m-%d %H:%M:%f', datetime.now())
                                 # create gps datas and insert it
                                 gps_data = GPSData(latitude=session.fix.latitude, longitude=session.fix.longitude,
@@ -226,7 +226,9 @@ def main(argv):
                         end_track_session(track_session)
                     except Exception:
                         import traceback
-                        log.log("Exception in the program execution\r\n %s" % traceback.format_exc().splitlines()[-1], log.LEVEL_ERROR)
+
+                        log.log("Exception in the program execution\r\n %s" % traceback.format_exc().splitlines()[-1],
+                                log.LEVEL_ERROR)
                         log.log("Traceback: %s" % traceback.format_exc(), log.LEVEL_DEBUG)
                         led_thread.pause()
                         led_thread.set_type_blink_error()
